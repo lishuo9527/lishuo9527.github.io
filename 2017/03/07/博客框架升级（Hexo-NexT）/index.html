@@ -87,28 +87,16 @@
 
 
 
-<meta name="description" content="最近工作需要，用Python写了一个实现微信自动回复功能的小工具，自己本地OS X系统环境集成的还不错，所以开发起来非常顺利。部署的linux服务器上的时候，因为环境的原因，着实废了一点功夫，本文记录下坎坷历程。主要工作：
-
-Python2.6升级至2.7；
-安装Pip；
-安装相关Python模块（MySQLdb，itchat，Requests，sqlalchemy）">
+<meta name="description" content="最近将个人博客做了升级。选了Hexo作为博客框架，主题为NexT。感觉这个框架还是蛮骚气的。Hexo是支持MarkDown的，这也是我选择它最主要的理由，现在博客里已经将简书的文章同步过去了，整个项目托管于Page 服务```。这里记录下升级的过程。1234567891011![博客效果图](http://upload-images.jianshu.io/upload_images/123992">
 <meta property="og:type" content="article">
-<meta property="og:title" content="CentOS 升级Python及安装相关组件">
-<meta property="og:url" content="http://lishuo.me/2016/08/20/CentOS-升级Python及安装相关组件/index.html">
+<meta property="og:title" content="博客框架升级（Hexo + NexT）">
+<meta property="og:url" content="http://lishuo.me/2017/03/07/博客框架升级（Hexo-NexT）/index.html">
 <meta property="og:site_name" content="Lis`s  Blog">
-<meta property="og:description" content="最近工作需要，用Python写了一个实现微信自动回复功能的小工具，自己本地OS X系统环境集成的还不错，所以开发起来非常顺利。部署的linux服务器上的时候，因为环境的原因，着实废了一点功夫，本文记录下坎坷历程。主要工作：
-
-Python2.6升级至2.7；
-安装Pip；
-安装相关Python模块（MySQLdb，itchat，Requests，sqlalchemy）">
-<meta property="og:updated_time" content="2017-03-06T16:48:07.000Z">
+<meta property="og:description" content="最近将个人博客做了升级。选了Hexo作为博客框架，主题为NexT。感觉这个框架还是蛮骚气的。Hexo是支持MarkDown的，这也是我选择它最主要的理由，现在博客里已经将简书的文章同步过去了，整个项目托管于Page 服务```。这里记录下升级的过程。1234567891011![博客效果图](http://upload-images.jianshu.io/upload_images/123992">
+<meta property="og:updated_time" content="2017-03-07T12:47:54.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="CentOS 升级Python及安装相关组件">
-<meta name="twitter:description" content="最近工作需要，用Python写了一个实现微信自动回复功能的小工具，自己本地OS X系统环境集成的还不错，所以开发起来非常顺利。部署的linux服务器上的时候，因为环境的原因，着实废了一点功夫，本文记录下坎坷历程。主要工作：
-
-Python2.6升级至2.7；
-安装Pip；
-安装相关Python模块（MySQLdb，itchat，Requests，sqlalchemy）">
+<meta name="twitter:title" content="博客框架升级（Hexo + NexT）">
+<meta name="twitter:description" content="最近将个人博客做了升级。选了Hexo作为博客框架，主题为NexT。感觉这个框架还是蛮骚气的。Hexo是支持MarkDown的，这也是我选择它最主要的理由，现在博客里已经将简书的文章同步过去了，整个项目托管于Page 服务```。这里记录下升级的过程。1234567891011![博客效果图](http://upload-images.jianshu.io/upload_images/123992">
 
 
 
@@ -136,13 +124,13 @@ Python2.6升级至2.7；
 
 
 
-  <link rel="canonical" href="http://lishuo.me/2016/08/20/CentOS-升级Python及安装相关组件/"/>
+  <link rel="canonical" href="http://lishuo.me/2017/03/07/博客框架升级（Hexo-NexT）/"/>
 
 
 
 
 
-  <title> CentOS 升级Python及安装相关组件 | Lis`s  Blog </title>
+  <title> 博客框架升级（Hexo + NexT） | Lis`s  Blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -291,7 +279,7 @@ Python2.6升级至2.7；
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://lishuo.me/2016/08/20/CentOS-升级Python及安装相关组件/">
+    <link itemprop="mainEntityOfPage" href="http://lishuo.me/2017/03/07/博客框架升级（Hexo-NexT）/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="特立独行的猪手">
@@ -312,7 +300,7 @@ Python2.6升级至2.7；
             
             
               
-                CentOS 升级Python及安装相关组件
+                博客框架升级（Hexo + NexT）
               
             
           </h2>
@@ -327,8 +315,8 @@ Python2.6升级至2.7；
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-08-20T15:40:00+08:00">
-                2016-08-20
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-07T20:45:16+08:00">
+                2017-03-07
               </time>
             
 
@@ -338,28 +326,6 @@ Python2.6升级至2.7；
           </span>
 
           
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Python/" itemprop="url" rel="index">
-                    <span itemprop="name">Python</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
 
           
             
@@ -368,8 +334,8 @@ Python2.6升级至2.7；
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2016/08/20/CentOS-升级Python及安装相关组件/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/20/CentOS-升级Python及安装相关组件/" itemprop="commentCount"></span>
+                <a href="/2017/03/07/博客框架升级（Hexo-NexT）/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/07/博客框架升级（Hexo-NexT）/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -401,49 +367,20 @@ Python2.6升级至2.7；
 
       
         <blockquote>
-<p>最近工作需要，用Python写了一个实现微信自动回复功能的小工具，自己本地OS X系统环境集成的还不错，所以开发起来非常顺利。部署的linux服务器上的时候，因为环境的原因，着实废了一点功夫，本文记录下坎坷历程。主要工作：</p>
-<ol>
-<li>Python2.6升级至2.7；</li>
-<li>安装Pip；</li>
-<li>安装相关Python模块（MySQLdb，itchat，Requests，sqlalchemy）</li>
-</ol>
+<p>最近将个人博客做了升级。选了Hexo作为博客框架，主题为NexT。感觉这个框架还是蛮骚气的。Hexo是支持MarkDown的，这也是我选择它最主要的理由，现在博客里已经将简书的文章同步过去了，整个项目托管于<figure class="highlight plain"><figcaption><span>Page 服务```。这里记录下升级的过程。</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">![博客效果图](http://upload-images.jianshu.io/upload_images/1239929-dfa00374b2f12c99.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">#### Hexo博客框架依赖</div><div class="line">安装Hexo需要首先安装如下依赖。</div><div class="line">- [Node.js](https://nodejs.org/en/)</div><div class="line">- [Git](https://git-scm.com/)</div><div class="line"></div><div class="line">```Tips：使用Windows的小伙伴可以下载git bash 做为命令行工具使用</div></pre></td></tr></table></figure></p>
 </blockquote>
-<a id="more"></a> 
-<p>####Step1  升级Python至2.7.12<br>公司服务器选用的是UCloud云服务器，内核版本是CentOS，CentOS是RHEL在编译的产物（我还是喜欢Ubuntu）。服务器内置环境非常纯洁，内置的Python版本是2.6（一个并没有什么卵用的版本）。</p>
-<ol>
-<li>到<a href="https://www.python.org/downloads/release/python-2712/" target="_blank" rel="external">官网</a>下载最新Python的源码，我这里先用的2.7.12版本的。</li>
-<li>解压 <figure class="highlight plain"><figcaption><span>vxf  Python-2.7.12.tgz```</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">3. 安装</div></pre></td></tr></table></figure></li>
-</ol>
-<p>#./configure  （可以指定Python安装目录，我这里安装在默认的路径下:/usr/local/bin）</p>
-<p>#make all             </p>
-<p>#make install<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">4. 至此Python2.7.1安装完毕。查看Python版本 ```#/usr/local/bin/python2.7 -V</div></pre></td></tr></table></figure></p>
-<ol>
-<li>建立软连接，替代默认Python版本<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">// 这里注意原先的python千万不要抛弃，后面有用</div><div class="line">#mv /usr/bin/python /usr/bin/python2.6</div><div class="line">#ln -s /usr/local/bin/python2.7 /usr/bin/python</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>这时候python -V 应该显示的就是最新安装的2.7.12了</p>
-<ol>
-<li>因为Python升级到2.7.12了，yum无法兼容的，所以还需要yum继续使用原先的2.6<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">#vim /usr/bin/yum</div><div class="line">#!/usr/bin/python --&gt; #!/usr/bin/python2.6 //修改头部文件</div><div class="line">#yum -h //查看是否正常工作</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>至此，升级Python的工作告一段落。</p>
-<p>####Step2  安装Python包管理工具Pip<br>pip的安装可以用过编译源码安装，也可以用一些简单的方式安装，我这里使用get-pip.py安装的。</p>
-<ol>
-<li>下载<a href="https://bootstrap.pypa.io/get-pip.py" target="_blank" rel="external">get-pip.py</a></li>
-<li>执行 <figure class="highlight python"><figcaption><span>get-pip.py```</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="number">3.</span> 查看pip是否安装成功`pip -h`</div><div class="line"></div><div class="line">至此pip安装完毕</div><div class="line"></div><div class="line"><span class="comment">####Step3 安装Python相关包</span></div></pre></td></tr></table></figure></li>
-</ol>
-<p>#pip install itchat    </p>
-<p>#pip install Requests</p>
-<p>#pip install sqlalchemy </p>
-<p>#pip install MySQL-pyhton // 安装MySQLdb模块<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">我以为一切都会开心加愉快，是我太天真啊。安装MySQLdb模块的时候，真是披荆斩棘啊，尤其是在系统环境不完善的过程中，泪水汪汪啊，具体的都不赘述，直接说结果。</div><div class="line"></div><div class="line">1. 在安装MySQLdb前需要安装一下依赖：</div></pre></td></tr></table></figure></p>
-<h1 id="yum-install-python-devel-mysql-devel-zlib-devel-openssl-devel"><a href="#yum-install-python-devel-mysql-devel-zlib-devel-openssl-devel" class="headerlink" title="yum install python-devel mysql-devel zlib-devel openssl-devel"></a>yum install python-devel mysql-devel zlib-devel openssl-devel</h1><p>```</p>
-<ol>
-<li><p><strong><em>重新编译Python</em></strong></p>
-</li>
-<li><p>最后执行<br><code>#pip install MySQL-pyhton</code></p>
-</li>
-</ol>
-<p>愿世界不再有伤害<br>-EOF-</p>
+<h5 id="1-安装Hexo"><a href="#1-安装Hexo" class="headerlink" title="1. 安装Hexo"></a>1. 安装Hexo</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ npm install -g hexo-cli</div></pre></td></tr></table></figure>
+<h5 id="2-初始化博客"><a href="#2-初始化博客" class="headerlink" title="2. 初始化博客"></a>2. 初始化博客</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ hexo init myBlog</div><div class="line"># myBlog是博客初始化文件夹的名称，你可以替换成任意你想设置的名称。</div></pre></td></tr></table></figure>
+<h5 id="3-生成静态页面"><a href="#3-生成静态页面" class="headerlink" title="3. 生成静态页面"></a>3. 生成静态页面</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo g</div></pre></td></tr></table></figure>
+<h5 id="4-本地启动"><a href="#4-本地启动" class="headerlink" title="4. 本地启动"></a>4. 本地启动</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ hexo s</div><div class="line"># 浏览器输入：http://localhost:4000 就可以预览的你的博客了。</div></pre></td></tr></table></figure>
+<h5 id="5-定制你的博客"><a href="#5-定制你的博客" class="headerlink" title="5. 定制你的博客"></a>5. 定制你的博客</h5><ul>
+<li><a href="https://hexo.io/" target="_blank" rel="external">Hexo官网</a></li>
+<li><a href="http://theme-next.iissnan.com/" target="_blank" rel="external">NexT官网</a></li>
+</ul>
+<p>需要注意的是，在配置博客的时候，需要区分出来是配置主题还是配置项目。至此，你可以根据官网介绍去定制你喜欢的博客的风格和主题了。</p>
+<h5 id="6-部署"><a href="#6-部署" class="headerlink" title="6. 部署"></a>6. 部署</h5><p>你可以将你的Hexo博客部署到GitHub上。在<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div></pre></td></tr></table></figure></p>
+<p>deploy:<br>    type: git<br>    repo: <a href="https://github.com/xxx/xxx.github.io.git" target="_blank" rel="external">https://github.com/xxx/xxx.github.io.git</a><br>    branch: master<br><code>执行</code>hexo d```就可以部署到GitHub了。（国内的网比较慢，要有耐心）</p>
+<p>最后有追求的小伙伴，也可以买个域名，配置<code>CNAME</code>是域名指向自己的<code>GitHub Page</code>。</p>
 
       
     </div>
@@ -474,8 +411,8 @@ Python2.6升级至2.7；
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/07/07/Spring整合Quartz定时任务框架/" rel="next" title="Spring整合Quartz定时任务框架">
-                <i class="fa fa-chevron-left"></i> Spring整合Quartz定时任务框架
+              <a href="/2017/02/28/JVM系列-类加载机制原理与过程/" rel="next" title="JVM系列-类加载机制原理与过程">
+                <i class="fa fa-chevron-left"></i> JVM系列-类加载机制原理与过程
               </a>
             
           </div>
@@ -483,10 +420,6 @@ Python2.6升级至2.7；
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/09/21/几种实现经纬度查询排序/" rel="prev" title="几种实现经纬度查询排序">
-                几种实现经纬度查询排序 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -512,8 +445,8 @@ Python2.6升级至2.7；
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/08/20/CentOS-升级Python及安装相关组件/"
-           data-title="CentOS 升级Python及安装相关组件" data-url="http://lishuo.me/2016/08/20/CentOS-升级Python及安装相关组件/">
+      <div class="ds-thread" data-thread-key="2017/03/07/博客框架升级（Hexo-NexT）/"
+           data-title="博客框架升级（Hexo + NexT）" data-url="http://lishuo.me/2017/03/07/博客框架升级（Hexo-NexT）/">
       </div>
     
   </div>
@@ -657,7 +590,7 @@ Python2.6升级至2.7；
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#yum-install-python-devel-mysql-devel-zlib-devel-openssl-devel"><span class="nav-number">1.</span> <span class="nav-text">yum install python-devel mysql-devel zlib-devel openssl-devel</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-安装Hexo"><span class="nav-number">1.</span> <span class="nav-text">1. 安装Hexo</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-初始化博客"><span class="nav-number">2.</span> <span class="nav-text">2. 初始化博客</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-生成静态页面"><span class="nav-number">3.</span> <span class="nav-text">3. 生成静态页面</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4-本地启动"><span class="nav-number">4.</span> <span class="nav-text">4. 本地启动</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#5-定制你的博客"><span class="nav-number">5.</span> <span class="nav-text">5. 定制你的博客</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#6-部署"><span class="nav-number">6.</span> <span class="nav-text">6. 部署</span></a></li></ol></div>
             
 
           </div>
