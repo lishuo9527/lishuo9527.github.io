@@ -90,8 +90,9 @@
 <meta name="description" content="JAVA设计模式系列：
 单例模式
 观察者模式
+模板方法模式
 
-观察者模型定义也称作发布/订阅模式。观察者模式定义了一种一对多的依赖关系，让多个观察者对象同时监听某一个主题对象。这个主题对象在状态发生变化时，会通知所有观察者对象，使它们能够自动更新自己。">
+观察者模式定义也称作发布/订阅模式。观察者模式定义了一种一对多的依赖关系，让多个观察者对象同时监听某一个主题对象。这个主题对象在状态发生变化时，会通知所有观察者对象，使它们能够自动更新自己。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="设计模式系列-观察者模式">
 <meta property="og:url" content="http://lishuo.me/2017/03/12/设计模式系列-观察者模式/index.html">
@@ -99,18 +100,20 @@
 <meta property="og:description" content="JAVA设计模式系列：
 单例模式
 观察者模式
+模板方法模式
 
-观察者模型定义也称作发布/订阅模式。观察者模式定义了一种一对多的依赖关系，让多个观察者对象同时监听某一个主题对象。这个主题对象在状态发生变化时，会通知所有观察者对象，使它们能够自动更新自己。">
+观察者模式定义也称作发布/订阅模式。观察者模式定义了一种一对多的依赖关系，让多个观察者对象同时监听某一个主题对象。这个主题对象在状态发生变化时，会通知所有观察者对象，使它们能够自动更新自己。">
 <meta property="og:image" content="https://ww4.sinaimg.cn/large/006tNc79gy1fdk28ai1dzj311w0road0.jpg">
 <meta property="og:image" content="https://ww3.sinaimg.cn/large/006tNc79gy1fdk2iu6uhnj30l9098gn5.jpg">
-<meta property="og:updated_time" content="2017-03-12T07:24:11.000Z">
+<meta property="og:updated_time" content="2017-03-18T10:39:05.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="设计模式系列-观察者模式">
 <meta name="twitter:description" content="JAVA设计模式系列：
 单例模式
 观察者模式
+模板方法模式
 
-观察者模型定义也称作发布/订阅模式。观察者模式定义了一种一对多的依赖关系，让多个观察者对象同时监听某一个主题对象。这个主题对象在状态发生变化时，会通知所有观察者对象，使它们能够自动更新自己。">
+观察者模式定义也称作发布/订阅模式。观察者模式定义了一种一对多的依赖关系，让多个观察者对象同时监听某一个主题对象。这个主题对象在状态发生变化时，会通知所有观察者对象，使它们能够自动更新自己。">
 <meta name="twitter:image" content="https://ww4.sinaimg.cn/large/006tNc79gy1fdk28ai1dzj311w0road0.jpg">
 
 
@@ -406,8 +409,9 @@
         <h4 id="JAVA设计模式系列："><a href="#JAVA设计模式系列：" class="headerlink" title="JAVA设计模式系列："></a>JAVA设计模式系列：</h4><ul>
 <li><a href="https://github.com/lishuo9527/JavaDesignPatterns/tree/master/Singleton" target="_blank" rel="external">单例模式</a></li>
 <li><a href="https://github.com/lishuo9527/JavaDesignPatterns/tree/master/Observer" target="_blank" rel="external">观察者模式</a></li>
+<li><a href="https://github.com/lishuo9527/JavaDesignPatterns/tree/master/TemplateMethod" target="_blank" rel="external">模板方法模式</a></li>
 </ul>
-<h1 id="观察者模型"><a href="#观察者模型" class="headerlink" title="观察者模型"></a>观察者模型</h1><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>也称作发布/订阅模式。观察者模式定义了一种一对多的依赖关系，让多个观察者对象同时监听某一个主题对象。这个主题对象在状态发生变化时，会通知所有观察者对象，使它们能够自动更新自己。</p>
+<h1 id="观察者模式"><a href="#观察者模式" class="headerlink" title="观察者模式"></a>观察者模式</h1><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>也称作发布/订阅模式。观察者模式定义了一种一对多的依赖关系，让多个观察者对象同时监听某一个主题对象。这个主题对象在状态发生变化时，会通知所有观察者对象，使它们能够自动更新自己。</p>
 <a id="more"></a>
 <h3 id="角色"><a href="#角色" class="headerlink" title="角色"></a>角色</h3><ul>
 <li><p><strong>抽象主题角色</strong>：把所有对观察者对象的引用保存在一个集合中，每个抽象主题角色都可以有任意数量的观察者。抽象主题提供一个接口，可以增加和删除观察者角色。一般用一个抽象类和接口来实现。</p>
@@ -553,7 +557,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-count">14</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -672,7 +676,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#JAVA设计模式系列："><span class="nav-number">1.</span> <span class="nav-text">JAVA设计模式系列：</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#观察者模型"><span class="nav-number"></span> <span class="nav-text">观察者模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#定义"><span class="nav-number"></span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#角色"><span class="nav-number"></span> <span class="nav-text">角色</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现"><span class="nav-number"></span> <span class="nav-text">实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#类图"><span class="nav-number">1.</span> <span class="nav-text">类图</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#抽象主题代码"><span class="nav-number">2.</span> <span class="nav-text">抽象主题代码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#抽象观察者代码"><span class="nav-number">3.</span> <span class="nav-text">抽象观察者代码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#观察者A"><span class="nav-number">4.</span> <span class="nav-text">观察者A</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#观察者B"><span class="nav-number">5.</span> <span class="nav-text">观察者B</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#具体主题实现代码"><span class="nav-number">6.</span> <span class="nav-text">具体主题实现代码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#测试类"><span class="nav-number">7.</span> <span class="nav-text">测试类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#运行结果"><span class="nav-number">8.</span> <span class="nav-text">运行结果</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#JAVA设计模式系列：-1"><span class="nav-number">9.</span> <span class="nav-text">JAVA设计模式系列：</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#JAVA设计模式系列："><span class="nav-number">1.</span> <span class="nav-text">JAVA设计模式系列：</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#观察者模式"><span class="nav-number"></span> <span class="nav-text">观察者模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#定义"><span class="nav-number"></span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#角色"><span class="nav-number"></span> <span class="nav-text">角色</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现"><span class="nav-number"></span> <span class="nav-text">实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#类图"><span class="nav-number">1.</span> <span class="nav-text">类图</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#抽象主题代码"><span class="nav-number">2.</span> <span class="nav-text">抽象主题代码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#抽象观察者代码"><span class="nav-number">3.</span> <span class="nav-text">抽象观察者代码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#观察者A"><span class="nav-number">4.</span> <span class="nav-text">观察者A</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#观察者B"><span class="nav-number">5.</span> <span class="nav-text">观察者B</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#具体主题实现代码"><span class="nav-number">6.</span> <span class="nav-text">具体主题实现代码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#测试类"><span class="nav-number">7.</span> <span class="nav-text">测试类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#运行结果"><span class="nav-number">8.</span> <span class="nav-text">运行结果</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#JAVA设计模式系列：-1"><span class="nav-number">9.</span> <span class="nav-text">JAVA设计模式系列：</span></a></li></ol></div>
             
 
           </div>

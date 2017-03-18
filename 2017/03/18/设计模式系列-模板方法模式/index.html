@@ -1,0 +1,877 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="特立独行的猪手" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="http://i1.piimg.com/567571/989180cb5486364b.jpg?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="JAVA设计模式系列：
+单例模式
+观察者模式
+模板方法模式
+
+模板方法模式定义模板方法模式在一个方法中定义了算法的骨架，把其中的某些步骤延迟到子类的实现，是为我们提供了代码复用的一种重要的技巧。模板方法使得子类可以在不改变算法结构的情况下，重新定义算法中的某些步骤。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="设计模式系列-模板方法模式">
+<meta property="og:url" content="http://lishuo.me/2017/03/18/设计模式系列-模板方法模式/index.html">
+<meta property="og:site_name" content="Lis`s  Blog">
+<meta property="og:description" content="JAVA设计模式系列：
+单例模式
+观察者模式
+模板方法模式
+
+模板方法模式定义模板方法模式在一个方法中定义了算法的骨架，把其中的某些步骤延迟到子类的实现，是为我们提供了代码复用的一种重要的技巧。模板方法使得子类可以在不改变算法结构的情况下，重新定义算法中的某些步骤。">
+<meta property="og:image" content="https://ww2.sinaimg.cn/large/006tNc79gy1fdr54brd65j30sd0kkwg6.jpg">
+<meta property="og:updated_time" content="2017-03-18T10:47:04.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="设计模式系列-模板方法模式">
+<meta name="twitter:description" content="JAVA设计模式系列：
+单例模式
+观察者模式
+模板方法模式
+
+模板方法模式定义模板方法模式在一个方法中定义了算法的骨架，把其中的某些步骤延迟到子类的实现，是为我们提供了代码复用的一种重要的技巧。模板方法使得子类可以在不改变算法结构的情况下，重新定义算法中的某些步骤。">
+<meta name="twitter:image" content="https://ww2.sinaimg.cn/large/006tNc79gy1fdr54brd65j30sd0kkwg6.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://lishuo.me/2017/03/18/设计模式系列-模板方法模式/"/>
+
+
+
+
+
+  <title> 设计模式系列-模板方法模式 | Lis`s  Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?04c3d6bbc9cc999595dba945a9475b5a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Lis`s  Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">一盘炒猪肝 二两黄酒 黄酒温一温</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://lishuo.me/2017/03/18/设计模式系列-模板方法模式/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="特立独行的猪手">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://i1.piimg.com/567571/989180cb5486364b.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lis`s  Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+            
+            
+              
+                设计模式系列-模板方法模式
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-18T18:39:57+08:00">
+                2017-03-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/设计模式/" itemprop="url" rel="index">
+                    <span itemprop="name">设计模式</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/03/18/设计模式系列-模板方法模式/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/18/设计模式系列-模板方法模式/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-eye"></i>本文总阅读量
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="JAVA设计模式系列："><a href="#JAVA设计模式系列：" class="headerlink" title="JAVA设计模式系列："></a>JAVA设计模式系列：</h4><ul>
+<li><a href="https://github.com/lishuo9527/JavaDesignPatterns/tree/master/Singleton" target="_blank" rel="external">单例模式</a></li>
+<li><a href="https://github.com/lishuo9527/JavaDesignPatterns/tree/master/Observer" target="_blank" rel="external">观察者模式</a></li>
+<li><a href="https://github.com/lishuo9527/JavaDesignPatterns/tree/master/TemplateMethod" target="_blank" rel="external">模板方法模式</a></li>
+</ul>
+<h1 id="模板方法模式"><a href="#模板方法模式" class="headerlink" title="模板方法模式"></a>模板方法模式</h1><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>模板方法模式在一个方法中定义了算法的骨架，把其中的某些步骤延迟到子类的实现，是为我们提供了代码复用的一种重要的技巧。模板方法使得子类可以在不改变算法结构的情况下，重新定义算法中的某些步骤。</p>
+<a id="more"></a>
+<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><p>这里简单通过一个示例来展示到底什么时候模板方法模式。这个示例向我们展示了制作咖啡和茶2种咖啡因饮料的过程，在这个过程中展示了模板方法模式的具体使用方法。</p>
+<p>代码地址：<a href="https://github.com/lishuo9527/JavaDesignPatterns/tree/master/TemplateMethod" target="_blank" rel="external">GitHub</a></p>
+<p>先看一下模板方法模式的类图：<br><img src="https://ww2.sinaimg.cn/large/006tNc79gy1fdr54brd65j30sd0kkwg6.jpg" alt=""></p>
+<p>首先我们定义一个抽象类<code>CaffeineBeverage</code>来作为模板方法的基类。具体代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">CaffeineBeverage</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="comment">// 模板方法</span></div><div class="line">    <span class="function"><span class="keyword">final</span> <span class="keyword">void</span> <span class="title">prepareReipe</span><span class="params">()</span> </span>&#123;</div><div class="line">        boilWater();</div><div class="line">        brew();</div><div class="line">        pourInCup();</div><div class="line">        addCondiments();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// 浸泡</span></div><div class="line">    <span class="function"><span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">brew</span><span class="params">()</span></span>;</div><div class="line"></div><div class="line">    <span class="comment">// 加料</span></div><div class="line">    <span class="function"><span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">addCondiments</span><span class="params">()</span></span>;</div><div class="line"></div><div class="line">    <span class="comment">// 煮水</span></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">boilWater</span><span class="params">()</span> </span>&#123;</div><div class="line">        System.out.println(<span class="string">"Boiling water"</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// 倒进杯子里</span></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">pourInCup</span><span class="params">()</span> </span>&#123;</div><div class="line">        System.out.println(<span class="string">"Pouring into cup"</span>);</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>在<code>CaffeineBeverage</code>类中定义了一个名为<code>prepareReipe()</code>的模板方法，用来描述冲泡咖啡因饮料的过程。方法用<code>final</code>修饰是为了防止子类修改方法的执行顺序。</p>
+<p><code>CaffeineBeverage</code>类定义了4个方法，分别是<code>brew()</code>、<code>addCondiments()</code>、<code>boilWater()</code>、<code>pourInCup（）</code>。在我们的示例中，冲泡咖啡和茶共有的过程分别是<code>煮水 boilWater()</code>、<code>倒进杯子里 pourInCup()</code>。这两个共用方法选择在<code>CaffeineBeverage</code>类实现。</p>
+<p><code>Tea</code>类、<code>Coffee</code>类是<code>CaffeineBeverage</code>类的子类。而<code>加料 addCondiments()</code>、<code>浸泡 brew()</code>分别在<code>Tea</code>类、<code>Coffee</code>类中有各自不同的实现。如下所示：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Tea</span> <span class="keyword">extends</span> <span class="title">CaffeineBeverage</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">brew</span><span class="params">()</span> </span>&#123;</div><div class="line">        System.out.println(<span class="string">"Stepping the tea."</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">addCondiments</span><span class="params">()</span> </span>&#123;</div><div class="line">        System.out.println(<span class="string">"Adding Lemon"</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Coffee</span> <span class="keyword">extends</span> <span class="title">CaffeineBeverage</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">brew</span><span class="params">()</span> </span>&#123;</div><div class="line">        System.out.println(<span class="string">"Dripping Coffee through filter"</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">addCondiments</span><span class="params">()</span> </span>&#123;</div><div class="line">        System.out.println(<span class="string">"Adding Suger and Mike"</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>完成了模板方法模式的代码，我们可以进行测试一下，测试类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        Tea tea = <span class="keyword">new</span> Tea();</div><div class="line">        tea.prepareReipe();</div><div class="line"></div><div class="line">        System.out.println(<span class="string">"**************"</span>);</div><div class="line"></div><div class="line">        Coffee coffee = <span class="keyword">new</span> Coffee();</div><div class="line">        coffee.prepareReipe();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>输出结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">Boiling water</div><div class="line">Stepping the tea.</div><div class="line">Pouring into cup</div><div class="line">Adding Lemon</div><div class="line">**************</div><div class="line">Boiling water</div><div class="line">Dripping Coffee through filter</div><div class="line">Pouring into cup</div><div class="line">Adding Suger and Mike</div></pre></td></tr></table></figure>
+<p>我们将冲茶和咖啡重复的方法<code>煮水 boilWater()</code>、<code>倒进杯子里 pourInCup()</code>抽象出来，每个子类分别去实现各自特有的步骤。以上便是模板方法的实例。</p>
+<h4 id="钩子"><a href="#钩子" class="headerlink" title="钩子"></a>钩子</h4><p>还需了解到，模板方法模式还有<code>钩子</code>的概念。<code>钩子</code>是一种被声明在抽象类的方法，可以为空或者默认的实现。<code>钩子</code>的存在可以让子类有能力对算法的不同点进行挂钩，是否需要挂钩由子类决定。</p>
+<p>借助上面的示例来展示<code>钩子</code>如何使用。首先我们在抽象类<code>CaffeineBeverage</code>定一个钩子，钩子的默认实现返回<code>true</code>。如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">// 定义一个钩子</div><div class="line"> boolean customerWantsCondiments() &#123;</div><div class="line">     return true;</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<p>并修改模板方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 模板方法</span></div><div class="line"><span class="function"><span class="keyword">final</span> <span class="keyword">void</span> <span class="title">prepareReipe</span><span class="params">()</span> </span>&#123;</div><div class="line">    boilWater();</div><div class="line">    brew();</div><div class="line">    pourInCup();</div><div class="line">    <span class="keyword">if</span> (customerWantsCondiments()) &#123;</div><div class="line">        addCondiments();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>目的是增加让客户选择是否需要给茶或者饮料来添加东西。我们可以在子类中覆盖<code>钩子</code>的写法。这里改下下<code>Tea</code>类，如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Tea</span> <span class="keyword">extends</span> <span class="title">CaffeineBeverage</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> String msg;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Tea</span><span class="params">(String msg)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.msg = msg;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">brew</span><span class="params">()</span> </span>&#123;</div><div class="line">        System.out.println(<span class="string">"Stepping the tea."</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">addCondiments</span><span class="params">()</span> </span>&#123;</div><div class="line">        System.out.println(<span class="string">"Adding Lemon"</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">customerWantsCondiments</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (<span class="string">"y"</span>.equals(<span class="keyword">this</span>.msg)) &#123;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>添加了一个<code>msg</code>变量，可以通过构造函数进行赋值，当<code>msg</code>为<code>y</code>时候，我们将在茶里添加柠檬，否则不添加。看一下测试代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">    Tea tea = <span class="keyword">new</span> Tea(<span class="string">"n"</span>);</div><div class="line">    tea.prepareReipe();</div><div class="line"></div><div class="line">    System.out.println(<span class="string">"**************"</span>);</div><div class="line"></div><div class="line">    Coffee coffee = <span class="keyword">new</span> Coffee();</div><div class="line">    coffee.prepareReipe();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>运行结果:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">Boiling water</div><div class="line">Stepping the tea.</div><div class="line">Pouring into cup</div><div class="line">**************</div><div class="line">Boiling water</div><div class="line">Dripping Coffee through filter</div><div class="line">Pouring into cup</div><div class="line">Adding Suger and Mike</div></pre></td></tr></table></figure>
+<p>和上面的比较一下，发现制作茶的过程中缺少了添加东西的过程，主要是因为我们在<code>Tea</code>类，重写了钩子，来控制加料的步骤。</p>
+<p>代码地址：<a href="https://github.com/lishuo9527/JavaDesignPatterns/tree/master/TemplateMethod" target="_blank" rel="external">GitHub</a></p>
+<p>如有纰漏，烦请指出。</p>
+<p><strong>参考《Head First 设计模式》</strong></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/17/源码分析之ThreadLocal/" rel="next" title="源码分析之ThreadLocal">
+                <i class="fa fa-chevron-left"></i> 源码分析之ThreadLocal
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/03/18/设计模式系列-模板方法模式/"
+           data-title="设计模式系列-模板方法模式" data-url="http://lishuo.me/2017/03/18/设计模式系列-模板方法模式/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://i1.piimg.com/567571/989180cb5486364b.jpg"
+               alt="特立独行的猪手" />
+          <p class="site-author-name" itemprop="name">特立独行的猪手</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/lishuo9527" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/1655774835?refer_flag=1001030101_&is_hot=1" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/lishuo3" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-ravelry"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.jianshu.com/u/115cae858f68" target="_blank" title="简书">
+                  
+                    <i class="fa fa-fw fa-bookmark"></i>
+                  
+                  简书
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.7mdm.com/" title="齐码代码" target="_blank">齐码代码</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="https://halfrost.com/" title="Halfrost's Field" target="_blank">Halfrost's Field</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#JAVA设计模式系列："><span class="nav-number">1.</span> <span class="nav-text">JAVA设计模式系列：</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#模板方法模式"><span class="nav-number"></span> <span class="nav-text">模板方法模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#定义"><span class="nav-number"></span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现"><span class="nav-number"></span> <span class="nav-text">实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#钩子"><span class="nav-number">1.</span> <span class="nav-text">钩子</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">特立独行的猪手</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+<div class="busuanzi-count">
+
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">本站访客数<span class="busuanzi-value" id="busuanzi_value_site_uv"></span>人次</span>
+  
+
+  
+    <span class="site-pv">本站总访问量<span class="busuanzi-value" id="busuanzi_value_site_pv"></span>次</span>
+  
+  
+</div>
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"lishuo9527"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>
