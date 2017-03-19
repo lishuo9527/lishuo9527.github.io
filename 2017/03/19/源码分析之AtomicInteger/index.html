@@ -71,7 +71,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="中间件," />
+  <meta name="keywords" content="特立独行的猪手" />
 
 
 
@@ -87,26 +87,19 @@
 
 
 
-<meta name="description" content="消息队列概述消息队列是系统中重要的中间件，主要解决应用耦合，异步消息，高并发等问题。实现高性能，高可用，可伸缩和最终一致性架构。">
+<meta name="description" content="AtomicInteger是java.util.concurrent.atomic包下的类，作用是提供原子操作Integer类。
+我们知道在Java中，i++、++i这种操作并不是线程安全的。主要是因为类似于++操作会被编译为2条操作指令，而多线程环境下CPU在执行过程可能会中断切换到别的线程，无法保证2条操作指令的原子性，所以是线程不安全。针对这种情况，我们可能会想到利用synchronize关">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Message Queue 消息队列">
-<meta property="og:url" content="http://lishuo.me/2016/09/21/Message-Queue-消息队列/index.html">
+<meta property="og:title" content="# 源码分析之AtomicInteger">
+<meta property="og:url" content="http://lishuo.me/2017/03/19/源码分析之AtomicInteger/index.html">
 <meta property="og:site_name" content="Lis`s  Blog">
-<meta property="og:description" content="消息队列概述消息队列是系统中重要的中间件，主要解决应用耦合，异步消息，高并发等问题。实现高性能，高可用，可伸缩和最终一致性架构。">
-<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1239929-e09cd2e8ad147b37.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1239929-c7c1db33842a5c6a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1239929-aa631f0572a3a1b8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1239929-889fed65524284c0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1239929-5e000c7f5123590b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1239929-4a71c9975a7a89f6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1239929-4396bc62522ef37c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1239929-48daba722fa86a47.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1239929-2c2d61b6e77b4bde.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2017-03-06T16:49:52.000Z">
+<meta property="og:description" content="AtomicInteger是java.util.concurrent.atomic包下的类，作用是提供原子操作Integer类。
+我们知道在Java中，i++、++i这种操作并不是线程安全的。主要是因为类似于++操作会被编译为2条操作指令，而多线程环境下CPU在执行过程可能会中断切换到别的线程，无法保证2条操作指令的原子性，所以是线程不安全。针对这种情况，我们可能会想到利用synchronize关">
+<meta property="og:updated_time" content="2017-03-19T14:47:58.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Message Queue 消息队列">
-<meta name="twitter:description" content="消息队列概述消息队列是系统中重要的中间件，主要解决应用耦合，异步消息，高并发等问题。实现高性能，高可用，可伸缩和最终一致性架构。">
-<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/1239929-e09cd2e8ad147b37.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta name="twitter:title" content="# 源码分析之AtomicInteger">
+<meta name="twitter:description" content="AtomicInteger是java.util.concurrent.atomic包下的类，作用是提供原子操作Integer类。
+我们知道在Java中，i++、++i这种操作并不是线程安全的。主要是因为类似于++操作会被编译为2条操作指令，而多线程环境下CPU在执行过程可能会中断切换到别的线程，无法保证2条操作指令的原子性，所以是线程不安全。针对这种情况，我们可能会想到利用synchronize关">
 
 
 
@@ -134,13 +127,13 @@
 
 
 
-  <link rel="canonical" href="http://lishuo.me/2016/09/21/Message-Queue-消息队列/"/>
+  <link rel="canonical" href="http://lishuo.me/2017/03/19/源码分析之AtomicInteger/"/>
 
 
 
 
 
-  <title> Message Queue 消息队列 | Lis`s  Blog </title>
+  <title> # 源码分析之AtomicInteger | Lis`s  Blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -289,7 +282,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://lishuo.me/2016/09/21/Message-Queue-消息队列/">
+    <link itemprop="mainEntityOfPage" href="http://lishuo.me/2017/03/19/源码分析之AtomicInteger/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="特立独行的猪手">
@@ -310,7 +303,7 @@
             
             
               
-                Message Queue 消息队列
+                # 源码分析之AtomicInteger
               
             
           </h2>
@@ -325,8 +318,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-21T17:20:00+08:00">
-                2016-09-21
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-19T22:45:52+08:00">
+                2017-03-19
               </time>
             
 
@@ -348,8 +341,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
+                  <a href="/categories/源码分析/" itemprop="url" rel="index">
+                    <span itemprop="name">源码分析</span>
                   </a>
                 </span>
 
@@ -366,8 +359,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2016/09/21/Message-Queue-消息队列/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/21/Message-Queue-消息队列/" itemprop="commentCount"></span>
+                <a href="/2017/03/19/源码分析之AtomicInteger/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/19/源码分析之AtomicInteger/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -398,30 +391,19 @@
       
 
       
-        <h3 id="消息队列概述"><a href="#消息队列概述" class="headerlink" title="消息队列概述"></a>消息队列概述</h3><p>消息队列是系统中重要的中间件，主要解决应用耦合，异步消息，高并发等问题。实现高性能，高可用，可伸缩和最终一致性架构。</p>
-<a id="more"></a> 
-<h3 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h3><h4 id="异步处理场景"><a href="#异步处理场景" class="headerlink" title="异步处理场景"></a>异步处理场景</h4><p><img src="http://upload-images.jianshu.io/upload_images/1239929-e09cd2e8ad147b37.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="串行模式"><br>在串行模式中，用户注册成功写入数据库之后，会发站内信，然后发短信通知。串行处理任务完成Respose给用户。<br><img src="http://upload-images.jianshu.io/upload_images/1239929-c7c1db33842a5c6a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="并行模式"><br>在并行模式中，用户注册成之后写入数据库之后，将发站内信、短信的任务写入消息队列中，供其他系统的去读取处理。</p>
-<h4 id="业务解耦场景"><a href="#业务解耦场景" class="headerlink" title="业务解耦场景"></a>业务解耦场景</h4><p><img src="http://upload-images.jianshu.io/upload_images/1239929-aa631f0572a3a1b8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="一般处理"><br><img src="http://upload-images.jianshu.io/upload_images/1239929-889fed65524284c0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="引入消息队列后"><br>在系统间引入MQ可以降低系统的耦合度，提高系统的高可用。</p>
-<h4 id="高并发场景"><a href="#高并发场景" class="headerlink" title="高并发场景"></a>高并发场景</h4><p><img src="http://upload-images.jianshu.io/upload_images/1239929-5e000c7f5123590b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="高并发"><br>面对高并发请求，引入MQ，可以控制请求人数，缓解短时间高流量搞垮系统</p>
-<p>###JMS消息服务</p>
-<p>####JMS消息模型</p>
-<p>#####P2P模型</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/1239929-4a71c9975a7a89f6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="P2P模型"><br>每个消息只有一个消费者（Consumer）(即一旦被消费，消息就不再在消息队列中)<br>发送者和接收者之间在时间上没有依赖性，也就是说当发送者发送了消息之后，不管接收者有没有正在运行，它不会影响到消息被发送到队列<br>接收者在成功接收消息之后需向队列应答成功</p>
-<p>#####Pub/Sub模式</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/1239929-4396bc62522ef37c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Pub/Sub模式"></p>
-<p>每个消息可以有多个消费者<br>发布者和订阅者之间有时间上的依赖性。针对某个主题的订阅者，它必须创建一个订阅者之后，才能消费发布者的消息。<br>为了消费消息，订阅者必须保持运行的状态。</p>
-<p>###常用的MQ</p>
-<p>####ActiveMQ</p>
-<blockquote>
-<p>⒈ 多种语言和协议编写客户端。<br>      语言: Java,C,C++,C#,Ruby,Perl,Python,PHP。<br>      应用协议： OpenWire,Stomp REST,WS Notification,XMPP,AMQP<br>⒉ 完全支持JMS1.1和J2EE 1.4规范 （持久化，XA消息，事务)<br>⒊ 对Spring的支持<br>⒋ 通过了常见J2EE服务器（如 Geronimo,JBoss 4,GlassFish,WebLogic)的测试，其中通      过JCA 1.5 resource adaptors的配置，可以让ActiveMQ可以自动的部署到任何兼容J2EE 1.4 商业服务器上<br>⒌ 支持多种传送协议：in-VM,TCP,SSL,NIO,UDP,JGroups,JXTA<br>⒍ 支持通过JDBC和journal提供高速的消息持久化<br>⒎ 从设计上保证了高性能的集群，客户端-服务器，点对点<br>⒏ 支持Ajax<br>⒐ 支持与Axis的整合<br>⒑ 可以很容易得调用内嵌JMS provider，进行测试</p>
-</blockquote>
-<p>####RabbitMQ</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/1239929-48daba722fa86a47.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="RabbitMQ结构图"><br>用于在分布式系统中存储转发消息，在易用性、扩展性、高可用性等方面表现不俗。</p>
-<p>####Kafka</p>
-<blockquote>
-<p>Kafka是一种高吞吐量的分布式发布订阅消息系统，它可以处理消费者规模的网站中的所有动作流数据。即使是非常普通的硬件Kafka也可以支持每秒数百万的消息。一般应用在大数据日志处理或对实时性（少量延迟），可靠性（少量丢数据）要求稍低的场景使用。</p>
-</blockquote>
-<p><img src="http://upload-images.jianshu.io/upload_images/1239929-2c2d61b6e77b4bde.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Kafka结构图"></p>
+        <p><code>AtomicInteger</code>是<code>java.util.concurrent.atomic</code>包下的类，作用是提供原子操作<code>Integer</code>类。</p>
+<p>我们知道在<code>Java</code>中，<code>i++、++i</code>这种操作并不是线程安全的。主要是因为类似于<code>++</code>操作会被编译为2条操作指令，而多线程环境下CPU在执行过程可能会中断切换到别的线程，无法保证2条操作指令的原子性，所以是线程不安全。针对这种情况，我们可能会想到利用<code>synchronize</code>关键字实现线程同步，保证<code>++</code>操作的原子性，的确这是一种有效的方法，但我们还有一种选择–<code>AtomicInteger</code>。</p>
+<a id="more"></a>
+<h3 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h3><p>首先先看一下<code>AtomicInteger</code>类的类变量。可以看出有个<code>unsafe</code>的类变量。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// setup to use Unsafe.compareAndSwapInt for updates</span></div><div class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Unsafe unsafe = Unsafe.getUnsafe();</div><div class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> valueOffset;</div><div class="line"></div><div class="line"><span class="keyword">static</span> &#123;</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">        valueOffset = unsafe.objectFieldOffset</div><div class="line">            (AtomicInteger.class.getDeclaredField(<span class="string">"value"</span>));</div><div class="line">    &#125; <span class="keyword">catch</span> (Exception ex) &#123; <span class="keyword">throw</span> <span class="keyword">new</span> Error(ex); &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">int</span> value;</div></pre></td></tr></table></figure>
+<p><code>Unsafe</code>类是用来在任意内存地址位置处读写数据，可见，对于普通用户来说，使用起来还是比较危险的。<code>AtomicInteger</code>类本质就是利用<code>Unsafe.compareAndSwapInt</code>这个<code>CAS</code>操作方法来保证<code>Integer</code>操作的原子性。</p>
+<p>看一下<code>AtomicInteger</code>的对<code>int</code>的加法操作。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * Atomically adds the given value to the current value.</div><div class="line"> *</div><div class="line"> * <span class="doctag">@param</span> delta the value to add</div><div class="line"> * <span class="doctag">@return</span> the updated value</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">addAndGet</span><span class="params">(<span class="keyword">int</span> delta)</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> unsafe.getAndAddInt(<span class="keyword">this</span>, valueOffset, delta) + delta;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>可以看出调用的是<code>Unsafe</code>类中的<code>getAndAddInt</code>方法，可以继续看看<code>getAndAddInt</code>的实现：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">getAndAddInt</span><span class="params">(Object var1, <span class="keyword">long</span> var2, <span class="keyword">int</span> var4)</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> var5;</div><div class="line">    <span class="keyword">do</span> &#123;</div><div class="line">        var5 = <span class="keyword">this</span>.getIntVolatile(var1, var2);</div><div class="line">    &#125; <span class="keyword">while</span>(!<span class="keyword">this</span>.compareAndSwapInt(var1, var2, var5, var5 + var4));</div><div class="line"></div><div class="line">    <span class="keyword">return</span> var5;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">native</span> <span class="keyword">boolean</span> <span class="title">compareAndSwapInt</span><span class="params">(Object var1, <span class="keyword">long</span> var2, <span class="keyword">int</span> var4, <span class="keyword">int</span> var5)</span></span>;</div></pre></td></tr></table></figure>
+<p><code>CAS</code>有3个操作数，内存值V，旧的预期值A，要修改的新值B。当且仅当预期值A和内存值V相同时，将内存值V修改为B，否则什么都不做。<code>AtomicInteger</code>类实则是利用这一特性来保证操作的原子性，可以说通过<code>CAS</code>实现的。</p>
+<p><code>CAS</code>虽然可以解决原子性问题，但也有其他问题，因为<code>CAS</code>需要在操作值的时候检查下值有没有发生变化，如果没有发生变化则更新，但是如果一个值原来是A，变成了B，又变成了A，那么使用<code>CAS</code>进行检查时会发现它的值没有发生变化，但是实际上却变化了。</p>
 
       
     </div>
@@ -443,12 +425,6 @@
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/中间件/" rel="tag"># 中间件</a>
-          
-        </div>
-      
 
       
         
@@ -458,8 +434,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/09/21/几种实现经纬度查询排序/" rel="next" title="几种实现经纬度查询排序">
-                <i class="fa fa-chevron-left"></i> 几种实现经纬度查询排序
+              <a href="/2017/03/18/设计模式系列-模板方法模式/" rel="next" title="设计模式系列-模板方法模式">
+                <i class="fa fa-chevron-left"></i> 设计模式系列-模板方法模式
               </a>
             
           </div>
@@ -468,8 +444,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/10/20/浅谈接口安全那些事/" rel="prev" title="浅谈接口安全那些事">
-                浅谈接口安全那些事 <i class="fa fa-chevron-right"></i>
+              <a href="/2017/03/19/源码分析之AtomicInteger-1/" rel="prev" title="源码分析之AtomicInteger">
+                源码分析之AtomicInteger <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -496,8 +472,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/09/21/Message-Queue-消息队列/"
-           data-title="Message Queue 消息队列" data-url="http://lishuo.me/2016/09/21/Message-Queue-消息队列/">
+      <div class="ds-thread" data-thread-key="2017/03/19/源码分析之AtomicInteger/"
+           data-title="# 源码分析之AtomicInteger" data-url="http://lishuo.me/2017/03/19/源码分析之AtomicInteger/">
       </div>
     
   </div>
@@ -665,7 +641,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#消息队列概述"><span class="nav-number">1.</span> <span class="nav-text">消息队列概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#应用场景"><span class="nav-number">2.</span> <span class="nav-text">应用场景</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#异步处理场景"><span class="nav-number">2.1.</span> <span class="nav-text">异步处理场景</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#业务解耦场景"><span class="nav-number">2.2.</span> <span class="nav-text">业务解耦场景</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#高并发场景"><span class="nav-number">2.3.</span> <span class="nav-text">高并发场景</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#源码分析"><span class="nav-number">1.</span> <span class="nav-text">源码分析</span></a></li></ol></div>
             
 
           </div>

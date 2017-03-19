@@ -88,13 +88,14 @@
 
 
 <meta name="description" content="一盘炒猪肝 二两黄酒 黄酒温一温">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Lis`s  Blog">
-<meta property="og:url" content="http://lishuo.me/categories/Python/index.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="源码分析之AtomicInteger">
+<meta property="og:url" content="http://lishuo.me/2017/03/19/源码分析之AtomicInteger-1/index.html">
 <meta property="og:site_name" content="Lis`s  Blog">
 <meta property="og:description" content="一盘炒猪肝 二两黄酒 黄酒温一温">
+<meta property="og:updated_time" content="2017-03-19T14:47:01.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Lis`s  Blog">
+<meta name="twitter:title" content="源码分析之AtomicInteger">
 <meta name="twitter:description" content="一盘炒猪肝 二两黄酒 黄酒温一温">
 
 
@@ -123,13 +124,13 @@
 
 
 
-  <link rel="canonical" href="http://lishuo.me/categories/Python/"/>
+  <link rel="canonical" href="http://lishuo.me/2017/03/19/源码分析之AtomicInteger-1/"/>
 
 
 
 
 
-  <title> 分类: Python | Lis`s  Blog </title>
+  <title> 源码分析之AtomicInteger | Lis`s  Blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -164,7 +165,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-left  ">
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -268,47 +269,158 @@
           <div id="content" class="content">
             
 
-  <section id="posts" class="posts-collapse">
-    <div class="collection-title">
-      <h2 >
-        Python
-        <small>分类</small>
-      </h2>
-    </div>
-
+  <div id="posts" class="posts-expand">
     
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2016/08/20/CentOS-升级Python及安装相关组件/" itemprop="url">
-              
-                <span itemprop="name">CentOS 升级Python及安装相关组件</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-08-20T15:40:00+08:00"
-              content="2016-08-20" >
-          08-20
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-    
-  </section>
 
   
 
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://lishuo.me/2017/03/19/源码分析之AtomicInteger-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="特立独行的猪手">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://i1.piimg.com/567571/989180cb5486364b.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lis`s  Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+            
+            
+              
+                源码分析之AtomicInteger
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-19T22:47:01+08:00">
+                2017-03-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/03/19/源码分析之AtomicInteger-1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/19/源码分析之AtomicInteger-1/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-eye"></i>本文总阅读量
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/19/源码分析之AtomicInteger/" rel="next" title="# 源码分析之AtomicInteger">
+                <i class="fa fa-chevron-left"></i> # 源码分析之AtomicInteger
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
           
           </div>
@@ -316,6 +428,14 @@
 
 
           
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/03/19/源码分析之AtomicInteger-1/"
+           data-title="源码分析之AtomicInteger" data-url="http://lishuo.me/2017/03/19/源码分析之AtomicInteger-1/">
+      </div>
+    
+  </div>
+
 
         </div>
         
@@ -588,6 +708,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
 
   
 
