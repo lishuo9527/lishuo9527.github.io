@@ -90,14 +90,14 @@
 <meta name="description" content="AtomicInteger是java.util.concurrent.atomic包下的类，作用是提供原子操作Integer类。
 我们知道在Java中，i++、++i这种操作并不是线程安全的。主要是因为类似于++操作会被编译为2条操作指令，而多线程环境下CPU在执行过程可能会中断切换到别的线程，无法保证2条操作指令的原子性，所以是线程不安全。针对这种情况，我们可能会想到利用synchronize关">
 <meta property="og:type" content="article">
-<meta property="og:title" content="# 源码分析之AtomicInteger">
+<meta property="og:title" content="源码分析之AtomicInteger">
 <meta property="og:url" content="http://lishuo.me/2017/03/19/源码分析之AtomicInteger/index.html">
 <meta property="og:site_name" content="Lis`s  Blog">
 <meta property="og:description" content="AtomicInteger是java.util.concurrent.atomic包下的类，作用是提供原子操作Integer类。
 我们知道在Java中，i++、++i这种操作并不是线程安全的。主要是因为类似于++操作会被编译为2条操作指令，而多线程环境下CPU在执行过程可能会中断切换到别的线程，无法保证2条操作指令的原子性，所以是线程不安全。针对这种情况，我们可能会想到利用synchronize关">
-<meta property="og:updated_time" content="2017-03-19T14:47:58.000Z">
+<meta property="og:updated_time" content="2017-03-19T14:51:51.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="# 源码分析之AtomicInteger">
+<meta name="twitter:title" content="源码分析之AtomicInteger">
 <meta name="twitter:description" content="AtomicInteger是java.util.concurrent.atomic包下的类，作用是提供原子操作Integer类。
 我们知道在Java中，i++、++i这种操作并不是线程安全的。主要是因为类似于++操作会被编译为2条操作指令，而多线程环境下CPU在执行过程可能会中断切换到别的线程，无法保证2条操作指令的原子性，所以是线程不安全。针对这种情况，我们可能会想到利用synchronize关">
 
@@ -133,7 +133,7 @@
 
 
 
-  <title> # 源码分析之AtomicInteger | Lis`s  Blog </title>
+  <title> 源码分析之AtomicInteger | Lis`s  Blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -303,7 +303,7 @@
             
             
               
-                # 源码分析之AtomicInteger
+                源码分析之AtomicInteger
               
             
           </h2>
@@ -444,10 +444,6 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/03/19/源码分析之AtomicInteger-1/" rel="prev" title="源码分析之AtomicInteger">
-                源码分析之AtomicInteger <i class="fa fa-chevron-right"></i>
-              </a>
-            
           </div>
         </div>
       
@@ -473,7 +469,7 @@
   <div class="comments" id="comments">
     
       <div class="ds-thread" data-thread-key="2017/03/19/源码分析之AtomicInteger/"
-           data-title="# 源码分析之AtomicInteger" data-url="http://lishuo.me/2017/03/19/源码分析之AtomicInteger/">
+           data-title="源码分析之AtomicInteger" data-url="http://lishuo.me/2017/03/19/源码分析之AtomicInteger/">
       </div>
     
   </div>
@@ -522,7 +518,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-count">15</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
