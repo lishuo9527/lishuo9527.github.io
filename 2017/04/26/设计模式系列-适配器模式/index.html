@@ -71,7 +71,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="中间件," />
+  <meta name="keywords" content="特立独行的猪手" />
 
 
 
@@ -87,26 +87,34 @@
 
 
 
-<meta name="description" content="消息队列概述消息队列是系统中重要的中间件，主要解决应用耦合，异步消息，高并发等问题。实现高性能，高可用，可伸缩和最终一致性架构。">
+<meta name="description" content="概念适配器模式是将类的一个接口转换成用户所期待的目标接口，使得原本因接口不匹配无法再一起工作的两个类一起工作。
+生活中我们也会遇到这样的场景，如港版iPhone手机的充电器需要附加一个电源适配器才能够正常使用国内的电源插孔。
+适配器模式有两种不同的形式：类适配器模式和对象适配器模式。
+角色
+目标角色（Target）：用户所期待的目标接口
+源角色（Adaptee）: 需要被适配的类
+适配者角色（Ad">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Message Queue 消息队列">
-<meta property="og:url" content="http://lishuo.me/2016/09/21/Message-Queue-消息队列/index.html">
+<meta property="og:title" content="设计模式之适配器模式">
+<meta property="og:url" content="http://lishuo.me/2017/04/26/设计模式系列-适配器模式/index.html">
 <meta property="og:site_name" content="Lis`s  Blog">
-<meta property="og:description" content="消息队列概述消息队列是系统中重要的中间件，主要解决应用耦合，异步消息，高并发等问题。实现高性能，高可用，可伸缩和最终一致性架构。">
-<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1239929-e09cd2e8ad147b37.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1239929-c7c1db33842a5c6a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1239929-aa631f0572a3a1b8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1239929-889fed65524284c0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1239929-5e000c7f5123590b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1239929-4a71c9975a7a89f6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1239929-4396bc62522ef37c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1239929-48daba722fa86a47.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1239929-2c2d61b6e77b4bde.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2017-03-06T16:49:52.000Z">
+<meta property="og:description" content="概念适配器模式是将类的一个接口转换成用户所期待的目标接口，使得原本因接口不匹配无法再一起工作的两个类一起工作。
+生活中我们也会遇到这样的场景，如港版iPhone手机的充电器需要附加一个电源适配器才能够正常使用国内的电源插孔。
+适配器模式有两种不同的形式：类适配器模式和对象适配器模式。
+角色
+目标角色（Target）：用户所期待的目标接口
+源角色（Adaptee）: 需要被适配的类
+适配者角色（Ad">
+<meta property="og:updated_time" content="2017-04-26T02:40:35.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Message Queue 消息队列">
-<meta name="twitter:description" content="消息队列概述消息队列是系统中重要的中间件，主要解决应用耦合，异步消息，高并发等问题。实现高性能，高可用，可伸缩和最终一致性架构。">
-<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/1239929-e09cd2e8ad147b37.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta name="twitter:title" content="设计模式之适配器模式">
+<meta name="twitter:description" content="概念适配器模式是将类的一个接口转换成用户所期待的目标接口，使得原本因接口不匹配无法再一起工作的两个类一起工作。
+生活中我们也会遇到这样的场景，如港版iPhone手机的充电器需要附加一个电源适配器才能够正常使用国内的电源插孔。
+适配器模式有两种不同的形式：类适配器模式和对象适配器模式。
+角色
+目标角色（Target）：用户所期待的目标接口
+源角色（Adaptee）: 需要被适配的类
+适配者角色（Ad">
 
 
 
@@ -134,13 +142,13 @@
 
 
 
-  <link rel="canonical" href="http://lishuo.me/2016/09/21/Message-Queue-消息队列/"/>
+  <link rel="canonical" href="http://lishuo.me/2017/04/26/设计模式系列-适配器模式/"/>
 
 
 
 
 
-  <title> Message Queue 消息队列 | Lis`s  Blog </title>
+  <title> 设计模式之适配器模式 | Lis`s  Blog </title>
   <meta name="baidu-site-verification" content="xd9p2Pbnya" />
 </head>
 
@@ -289,7 +297,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://lishuo.me/2016/09/21/Message-Queue-消息队列/">
+    <link itemprop="mainEntityOfPage" href="http://lishuo.me/2017/04/26/设计模式系列-适配器模式/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="特立独行的猪手">
@@ -310,7 +318,7 @@
             
             
               
-                Message Queue 消息队列
+                设计模式之适配器模式
               
             
           </h2>
@@ -325,8 +333,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-21T17:20:00+08:00">
-                2016-09-21
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-26T10:37:26+08:00">
+                2017-04-26
               </time>
             
 
@@ -348,8 +356,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
+                  <a href="/categories/设计模式/" itemprop="url" rel="index">
+                    <span itemprop="name">设计模式</span>
                   </a>
                 </span>
 
@@ -366,8 +374,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2016/09/21/Message-Queue-消息队列/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2016/09/21/Message-Queue-消息队列/" itemprop="commentCount"></span>
+                <a href="/2017/04/26/设计模式系列-适配器模式/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/04/26/设计模式系列-适配器模式/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -398,30 +406,29 @@
       
 
       
-        <h3 id="消息队列概述"><a href="#消息队列概述" class="headerlink" title="消息队列概述"></a>消息队列概述</h3><p>消息队列是系统中重要的中间件，主要解决应用耦合，异步消息，高并发等问题。实现高性能，高可用，可伸缩和最终一致性架构。</p>
-<a id="more"></a> 
-<h3 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h3><h4 id="异步处理场景"><a href="#异步处理场景" class="headerlink" title="异步处理场景"></a>异步处理场景</h4><p><img src="http://upload-images.jianshu.io/upload_images/1239929-e09cd2e8ad147b37.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="串行模式"><br>在串行模式中，用户注册成功写入数据库之后，会发站内信，然后发短信通知。串行处理任务完成Respose给用户。<br><img src="http://upload-images.jianshu.io/upload_images/1239929-c7c1db33842a5c6a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="并行模式"><br>在并行模式中，用户注册成之后写入数据库之后，将发站内信、短信的任务写入消息队列中，供其他系统的去读取处理。</p>
-<h4 id="业务解耦场景"><a href="#业务解耦场景" class="headerlink" title="业务解耦场景"></a>业务解耦场景</h4><p><img src="http://upload-images.jianshu.io/upload_images/1239929-aa631f0572a3a1b8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="一般处理"><br><img src="http://upload-images.jianshu.io/upload_images/1239929-889fed65524284c0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="引入消息队列后"><br>在系统间引入MQ可以降低系统的耦合度，提高系统的高可用。</p>
-<h4 id="高并发场景"><a href="#高并发场景" class="headerlink" title="高并发场景"></a>高并发场景</h4><p><img src="http://upload-images.jianshu.io/upload_images/1239929-5e000c7f5123590b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="高并发"><br>面对高并发请求，引入MQ，可以控制请求人数，缓解短时间高流量搞垮系统</p>
-<p>###JMS消息服务</p>
-<p>####JMS消息模型</p>
-<p>#####P2P模型</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/1239929-4a71c9975a7a89f6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="P2P模型"><br>每个消息只有一个消费者（Consumer）(即一旦被消费，消息就不再在消息队列中)<br>发送者和接收者之间在时间上没有依赖性，也就是说当发送者发送了消息之后，不管接收者有没有正在运行，它不会影响到消息被发送到队列<br>接收者在成功接收消息之后需向队列应答成功</p>
-<p>#####Pub/Sub模式</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/1239929-4396bc62522ef37c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Pub/Sub模式"></p>
-<p>每个消息可以有多个消费者<br>发布者和订阅者之间有时间上的依赖性。针对某个主题的订阅者，它必须创建一个订阅者之后，才能消费发布者的消息。<br>为了消费消息，订阅者必须保持运行的状态。</p>
-<p>###常用的MQ</p>
-<p>####ActiveMQ</p>
-<blockquote>
-<p>⒈ 多种语言和协议编写客户端。<br>      语言: Java,C,C++,C#,Ruby,Perl,Python,PHP。<br>      应用协议： OpenWire,Stomp REST,WS Notification,XMPP,AMQP<br>⒉ 完全支持JMS1.1和J2EE 1.4规范 （持久化，XA消息，事务)<br>⒊ 对Spring的支持<br>⒋ 通过了常见J2EE服务器（如 Geronimo,JBoss 4,GlassFish,WebLogic)的测试，其中通      过JCA 1.5 resource adaptors的配置，可以让ActiveMQ可以自动的部署到任何兼容J2EE 1.4 商业服务器上<br>⒌ 支持多种传送协议：in-VM,TCP,SSL,NIO,UDP,JGroups,JXTA<br>⒍ 支持通过JDBC和journal提供高速的消息持久化<br>⒎ 从设计上保证了高性能的集群，客户端-服务器，点对点<br>⒏ 支持Ajax<br>⒐ 支持与Axis的整合<br>⒑ 可以很容易得调用内嵌JMS provider，进行测试</p>
-</blockquote>
-<p>####RabbitMQ</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/1239929-48daba722fa86a47.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="RabbitMQ结构图"><br>用于在分布式系统中存储转发消息，在易用性、扩展性、高可用性等方面表现不俗。</p>
-<p>####Kafka</p>
-<blockquote>
-<p>Kafka是一种高吞吐量的分布式发布订阅消息系统，它可以处理消费者规模的网站中的所有动作流数据。即使是非常普通的硬件Kafka也可以支持每秒数百万的消息。一般应用在大数据日志处理或对实时性（少量延迟），可靠性（少量丢数据）要求稍低的场景使用。</p>
-</blockquote>
-<p><img src="http://upload-images.jianshu.io/upload_images/1239929-2c2d61b6e77b4bde.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Kafka结构图"></p>
+        <h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p>适配器模式是将类的一个接口转换成用户所期待的目标接口，使得原本因接口不匹配无法再一起工作的两个类一起工作。</p>
+<p>生活中我们也会遇到这样的场景，如港版<code>iPhone</code>手机的充电器需要附加一个电源适配器才能够正常使用国内的电源插孔。</p>
+<p>适配器模式有两种不同的形式：<strong>类适配器模式</strong>和<strong>对象适配器模式</strong>。</p>
+<h3 id="角色"><a href="#角色" class="headerlink" title="角色"></a>角色</h3><ul>
+<li>目标角色（<code>Target</code>）：用户所期待的目标接口</li>
+<li>源角色（<code>Adaptee</code>）: 需要被适配的类</li>
+<li>适配者角色（<code>Adapter</code>）: 通过包装被适配的对象，将原接口转换为用户所期待的目标接口</li>
+</ul>
+<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><h4 id="目标角色实现"><a href="#目标角色实现" class="headerlink" title="目标角色实现"></a>目标角色实现</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Target</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">method1</span><span class="params">()</span></span>;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">method2</span><span class="params">()</span></span>;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>由<code>Target</code>接口实现目标角色，用户期待接口包含<code>method1</code>和<code>method2</code>两个方法。</p>
+<h4 id="源角色实现"><a href="#源角色实现" class="headerlink" title="源角色实现"></a>源角色实现</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Adaptee</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">method1</span><span class="params">()</span></span>&#123;</div><div class="line">        System.out.println(<span class="string">"Adaptee method1"</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>源角色<code>Adaptee</code>类只实现了<code>method1</code>方法，这和用户所期望的不同。所以这里需要引入适配器，去转换成用户所期待的目标接口。</p>
+<h4 id="适配器实现"><a href="#适配器实现" class="headerlink" title="适配器实现"></a>适配器实现</h4><p>对于适配器的实现可分为两种形式：<strong>类适配器模式</strong>和<strong>对象适配器模式</strong>。</p>
+<h5 id="类适配器模式"><a href="#类适配器模式" class="headerlink" title="类适配器模式"></a>类适配器模式</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Adapter</span> <span class="keyword">extends</span> <span class="title">Adaptee</span> <span class="keyword">implements</span>  <span class="title">Target</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">method2</span><span class="params">()</span> </span>&#123;</div><div class="line">        System.out.println(<span class="string">"Adapter method2"</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>Adapter</code>类通过继承源角色<code>Adaptee</code>，复用了父类<code>method1</code>方法，并实现<code>Target</code>接口中<code>Adaptee</code>类中没有的方法<code>method2</code>。从而转换为用户期待目标的接口。</p>
+<h5 id="对象适配器模式"><a href="#对象适配器模式" class="headerlink" title="对象适配器模式"></a>对象适配器模式</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Adapter</span> <span class="keyword">implements</span> <span class="title">Target</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> Adaptee adaptee;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Adapter</span><span class="params">(Adaptee adaptee)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.adaptee = adaptee;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">method1</span><span class="params">()</span> </span>&#123;</div><div class="line">        adaptee.method1();</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">method2</span><span class="params">()</span> </span>&#123;</div><div class="line">        System.out.println(<span class="string">"Adapter method2"</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>Adapter</code>类直接实现了<code>Target</code>接口。<code>Adapter</code>类拥有一个<code>Adaptee</code>类的对象，将<code>method1</code>方法的实现委托给该对象实现。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><h4 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h4><ul>
+<li>利用适配器后，使用这只需要调用一个接口即可。</li>
+<li>复用性强，复用了现有的类，无需修改源角色的类，使得目标接口和源角色解耦。</li>
+<li>更好的拓展性，一个适配器可以集成多个源角色来完成目标接口。</li>
+</ul>
+<h4 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h4><p>会使得系统之间的关系变的负责，过多的使用适配器模式，无疑增加代码阅读和理解成本。</p>
 
       
     </div>
@@ -443,12 +450,6 @@
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/中间件/" rel="tag"># 中间件</a>
-          
-        </div>
-      
 
       
         
@@ -458,8 +459,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/09/21/几种实现经纬度查询排序/" rel="next" title="几种实现经纬度查询排序">
-                <i class="fa fa-chevron-left"></i> 几种实现经纬度查询排序
+              <a href="/2017/04/23/源码分析之LinkedHashMap/" rel="next" title="源码分析之LinkedHashMap">
+                <i class="fa fa-chevron-left"></i> 源码分析之LinkedHashMap
               </a>
             
           </div>
@@ -467,10 +468,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/10/20/浅谈接口安全那些事/" rel="prev" title="浅谈接口安全那些事">
-                浅谈接口安全那些事 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -667,7 +664,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#消息队列概述"><span class="nav-number">1.</span> <span class="nav-text">消息队列概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#应用场景"><span class="nav-number">2.</span> <span class="nav-text">应用场景</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#异步处理场景"><span class="nav-number">2.1.</span> <span class="nav-text">异步处理场景</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#业务解耦场景"><span class="nav-number">2.2.</span> <span class="nav-text">业务解耦场景</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#高并发场景"><span class="nav-number">2.3.</span> <span class="nav-text">高并发场景</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#概念"><span class="nav-number">1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#角色"><span class="nav-number">2.</span> <span class="nav-text">角色</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现"><span class="nav-number">3.</span> <span class="nav-text">实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#目标角色实现"><span class="nav-number">3.1.</span> <span class="nav-text">目标角色实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#源角色实现"><span class="nav-number">3.2.</span> <span class="nav-text">源角色实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#适配器实现"><span class="nav-number">3.3.</span> <span class="nav-text">适配器实现</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#类适配器模式"><span class="nav-number">3.3.1.</span> <span class="nav-text">类适配器模式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#对象适配器模式"><span class="nav-number">3.3.2.</span> <span class="nav-text">对象适配器模式</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#优点"><span class="nav-number">4.1.</span> <span class="nav-text">优点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#缺点"><span class="nav-number">4.2.</span> <span class="nav-text">缺点</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -819,9 +816,9 @@
 
     <script type="text/javascript">
       var disqus_shortname = 'lishuo3';
-      var disqus_identifier = '2016/09/21/Message-Queue-消息队列/';
+      var disqus_identifier = '2017/04/26/设计模式系列-适配器模式/';
 
-      var disqus_title = "Message Queue 消息队列";
+      var disqus_title = "设计模式之适配器模式";
 
 
       function run_disqus_script(disqus_script) {
