@@ -280,6 +280,149 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://lishuo.me/2017/06/14/将服务免费升级为HTTPS协议/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="特立独行的猪手">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://i1.piimg.com/567571/989180cb5486364b.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lis`s  Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/06/14/将服务免费升级为HTTPS协议/" itemprop="url">
+                  将服务免费升级为HTTPS协议
+                </a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-14T15:15:25+08:00">
+                2017-06-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/06/14/将服务免费升级为HTTPS协议/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/06/14/将服务免费升级为HTTPS协议/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><img src="https://imgsa.baidu.com/baike/c0%3Dbaike80%2C5%2C5%2C80%2C26/sign=be3a8edb2cf5e0fefa1581533d095fcd/cefc1e178a82b90104b542f1728da9773812efdc.jpg" alt=""></p>
+<h4 id="为何需要HTTPS"><a href="#为何需要HTTPS" class="headerlink" title="为何需要HTTPS"></a>为何需要HTTPS</h4><p>常用的<code>HTTP</code>协议以明文方式发送内容，不提供任何方式的数据加密，如果攻击者截取了传输报文，就可以直接读懂其中的信息，因此<code>HTTP</code>协议不适合传输一些敏感信息，比如信用卡号、密码等。</p>
+<p><code>HTTPS</code>协议则是在<code>HTTP</code>的基础上加入了<code>SSL</code>协议，<code>SSL</code>可以依靠证书来验证服务器的身份，从而保证通信过程中的数据加密。</p>
+<p>####（一）申请SSL证书<br>在申请证书之前，首先需要确认需要申请证书的域名。这里是通过阿里云云盾证书服务来购买证书。<br><img src="https://ws2.sinaimg.cn/large/006tNbRwgy1fgkq1y5w6kj30zf0htabw.jpg" alt=""></p>
+<p>证书大致分为几种类型<code>OV</code>、<code>DV</code>、<code>EV</code>。不同类型的证书对应不同的价格以及限制。<code>OV</code>型证书和<code>DV</code>型证书最大的区别就是<code>OV</code>型包含企业名称信息，而<code>DV</code>型证书不包含企业名称信息。<code>EV</code>型证书相对来说数据保密能力更强，安全性更高，自然价格也贵。这里用了免费的<code>DV</code>型证书。</p>
+<ul>
+<li><code>OV</code>型</li>
+</ul>
+<p><img src="https://ws4.sinaimg.cn/large/006tNbRwgy1fgkqiz3qscj30a000yjrd.jpg" alt=""></p>
+<ul>
+<li><code>DV</code>型</li>
+</ul>
+<p><img src="https://ws3.sinaimg.cn/large/006tNbRwgy1fgkqqp2ueoj30au014t8o.jpg" alt=""></p>
+<h4 id="（二）服务器配置"><a href="#（二）服务器配置" class="headerlink" title="（二）服务器配置"></a>（二）服务器配置</h4><p>将申请下来的证书上传至服务器，并通过<code>nginx</code>的<code>ssl</code>模块配置<code>HTTPS</code>协议。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"># HTTPs server configuration</div><div class="line"></div><div class="line">upstream ssl &#123;</div><div class="line">  server 127.0.0.1:8080;</div><div class="line">&#125;</div><div class="line"></div><div class="line">server &#123;</div><div class="line">    listen       443 ;</div><div class="line">    server_name  www.yourdomain.com;</div><div class="line">    ssl on;</div><div class="line"></div><div class="line">    ssl_certificate /etc/nginx/yourdomain.com.crt;</div><div class="line">    ssl_certificate_key /etc/nginx/yourdomain.com.key;</div><div class="line">    ssl_session_cache shared:SSL:1m;</div><div class="line">    ssl_session_timeout  10m;</div><div class="line">    ssl_ciphers HIGH:!aNULL:!MD5;</div><div class="line">    ssl_prefer_server_ciphers on;</div><div class="line">    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;</div><div class="line"></div><div class="line"></div><div class="line">    location / &#123;</div><div class="line">        proxy_pass http://ssl;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在<code>nginx</code>的<code>SSL</code>模块中配置证书和<code>KEY</code>的文件路径。这里将所有的请求转发至服务器<code>8080</code>端口,具体可根据实际业务作调整。重启<code>nginx</code>就可以通过<code>HTTPS</code>协议访问原来的<code>HTTP</code>协议的<code>8080</code>端口的服务。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://lishuo.me/2017/05/31/微信小程序支付的奇葩踩坑经历/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1619,163 +1762,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://lishuo.me/2017/04/12/源码分析之ArrayList/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="特立独行的猪手">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://i1.piimg.com/567571/989180cb5486364b.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Lis`s  Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/04/12/源码分析之ArrayList/" itemprop="url">
-                  源码分析之ArrayList
-                </a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-12T17:51:50+08:00">
-                2017-04-12
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/源码分析/" itemprop="url" rel="index">
-                    <span itemprop="name">源码分析</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/04/12/源码分析之ArrayList/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/04/12/源码分析之ArrayList/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p><code>ArrayList</code>是我们常用的集合类，是基于数组实现的。不同于数组的是<code>ArrayList</code>可以动态扩容。</p>
-<h3 id="类结构"><a href="#类结构" class="headerlink" title="类结构"></a>类结构</h3><p><code>ArrayList</code>是<code>Java</code>集合框架<code>List</code>接口的一个实现类。提供了一些操作数组元素的方法。</p>
-<p>实现<code>List</code>接口同时，也实现了 <code>RandomAccess</code>, <code>Cloneable</code>, <code>java.io.Serializable</code>。</p>
-<p><code>ArrayList</code>继承与<code>AbstractList</code>。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/04/12/源码分析之ArrayList/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1825,7 +1811,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-count">32</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
