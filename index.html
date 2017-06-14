@@ -366,25 +366,16 @@
 
       
         
-          
-            <p><img src="https://imgsa.baidu.com/baike/c0%3Dbaike80%2C5%2C5%2C80%2C26/sign=be3a8edb2cf5e0fefa1581533d095fcd/cefc1e178a82b90104b542f1728da9773812efdc.jpg" alt=""></p>
+          <p><img src="https://imgsa.baidu.com/baike/c0%3Dbaike80%2C5%2C5%2C80%2C26/sign=be3a8edb2cf5e0fefa1581533d095fcd/cefc1e178a82b90104b542f1728da9773812efdc.jpg" alt=""></p>
 <h4 id="为何需要HTTPS"><a href="#为何需要HTTPS" class="headerlink" title="为何需要HTTPS"></a>为何需要HTTPS</h4><p>常用的<code>HTTP</code>协议以明文方式发送内容，不提供任何方式的数据加密，如果攻击者截取了传输报文，就可以直接读懂其中的信息，因此<code>HTTP</code>协议不适合传输一些敏感信息，比如信用卡号、密码等。</p>
 <p><code>HTTPS</code>协议则是在<code>HTTP</code>的基础上加入了<code>SSL</code>协议，<code>SSL</code>可以依靠证书来验证服务器的身份，从而保证通信过程中的数据加密。</p>
-<p>####（一）申请SSL证书<br>在申请证书之前，首先需要确认需要申请证书的域名。这里是通过阿里云云盾证书服务来购买证书。<br><img src="https://ws2.sinaimg.cn/large/006tNbRwgy1fgkq1y5w6kj30zf0htabw.jpg" alt=""></p>
-<p>证书大致分为几种类型<code>OV</code>、<code>DV</code>、<code>EV</code>。不同类型的证书对应不同的价格以及限制。<code>OV</code>型证书和<code>DV</code>型证书最大的区别就是<code>OV</code>型包含企业名称信息，而<code>DV</code>型证书不包含企业名称信息。<code>EV</code>型证书相对来说数据保密能力更强，安全性更高，自然价格也贵。这里用了免费的<code>DV</code>型证书。</p>
-<ul>
-<li><code>OV</code>型</li>
-</ul>
-<p><img src="https://ws4.sinaimg.cn/large/006tNbRwgy1fgkqiz3qscj30a000yjrd.jpg" alt=""></p>
-<ul>
-<li><code>DV</code>型</li>
-</ul>
-<p><img src="https://ws3.sinaimg.cn/large/006tNbRwgy1fgkqqp2ueoj30au014t8o.jpg" alt=""></p>
-<h4 id="（二）服务器配置"><a href="#（二）服务器配置" class="headerlink" title="（二）服务器配置"></a>（二）服务器配置</h4><p>将申请下来的证书上传至服务器，并通过<code>nginx</code>的<code>ssl</code>模块配置<code>HTTPS</code>协议。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"># HTTPs server configuration</div><div class="line"></div><div class="line">upstream ssl &#123;</div><div class="line">  server 127.0.0.1:8080;</div><div class="line">&#125;</div><div class="line"></div><div class="line">server &#123;</div><div class="line">    listen       443 ;</div><div class="line">    server_name  www.yourdomain.com;</div><div class="line">    ssl on;</div><div class="line"></div><div class="line">    ssl_certificate /etc/nginx/yourdomain.com.crt;</div><div class="line">    ssl_certificate_key /etc/nginx/yourdomain.com.key;</div><div class="line">    ssl_session_cache shared:SSL:1m;</div><div class="line">    ssl_session_timeout  10m;</div><div class="line">    ssl_ciphers HIGH:!aNULL:!MD5;</div><div class="line">    ssl_prefer_server_ciphers on;</div><div class="line">    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;</div><div class="line"></div><div class="line"></div><div class="line">    location / &#123;</div><div class="line">        proxy_pass http://ssl;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>在<code>nginx</code>的<code>SSL</code>模块中配置证书和<code>KEY</code>的文件路径。这里将所有的请求转发至服务器<code>8080</code>端口,具体可根据实际业务作调整。重启<code>nginx</code>就可以通过<code>HTTPS</code>协议访问原来的<code>HTTP</code>协议的<code>8080</code>端口的服务。</p>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/06/14/将服务免费升级为HTTPS协议/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
