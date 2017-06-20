@@ -94,7 +94,7 @@
 <meta property="og:site_name" content="Lis`s  Blog">
 <meta property="og:description" content="JVM内存区域了解Java GC之前，必须先搞清楚JVM中内存区域的划分。JVM中内存区域大致可分为如上图所示几大区域。其中：">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1239929-57cecd7aa84dbb81.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/500">
-<meta property="og:updated_time" content="2017-03-06T16:50:09.000Z">
+<meta property="og:updated_time" content="2017-06-20T07:00:07.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JVM系列-JVM内存区域与GC机制">
 <meta name="twitter:description" content="JVM内存区域了解Java GC之前，必须先搞清楚JVM中内存区域的划分。JVM中内存区域大致可分为如上图所示几大区域。其中：">
@@ -390,20 +390,22 @@
       
 
       
-        <h3 id="JVM内存区域"><a href="#JVM内存区域" class="headerlink" title="JVM内存区域"></a>JVM内存区域</h3><p>了解Java GC之前，必须先搞清楚JVM中内存区域的划分。<br><img src="http://upload-images.jianshu.io/upload_images/1239929-57cecd7aa84dbb81.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/500" alt="JVM内存区域图"><br>JVM中内存区域大致可分为如上图所示几大区域。其中：<br><a id="more"></a> </p>
-<p>######堆区<br>JVM只有一个堆，堆区是JVM内存管理中最大的一块，也是GC主要工作区域，是线程共享的。堆区的主要作用是存储对象实例，一般来说，所有的对象都在堆上分配内存。</p>
-<p>######方法区<br>JVM方法区又称静态区，存放所有的class和静态变量、final常量。在HotSpot虚拟机中也被称为永生代，线程共享。</p>
-<p>######虚拟机栈<br>线程的每个方法在执行的同时都会创建一个栈桢，栈桢中存储的有局部变量表，操作站，动态链接，方法出口灯，当方法被调用时，栈桢在JVM栈中入栈，当方法执行结束的时候，栈桢出栈。<br>局部变量表中存储着方法的相关局部变量，包括各种基本数据类型，对象的引用，返回的地址等，在局部变量表中在编译是就已经确定好的，方法在运行时所需要分配的空间在栈桢中完全确定的，在方法生命周期内都不会改变。<br>虚拟机栈中会出现2种异常：StatckOverFlowError 和 OutOfMemoryError；当线程调用的栈深度大于虚拟机允许的最大深度，则抛出StatckOverFlowError，如无限递归，就容易出现这个问题。线程不断的申请内存空间，直至内存不足，会抛出OutOfMemoryError异常，如无限循环申请内存空间就会导致OOM异常。</p>
-<p>######本地方法栈<br>本地方法栈的作用和虚拟机栈很多方面都相同，唯一的区别是：虚拟机栈是执行Java方法的，而本地方法栈是执行native方法的。线程私有。<br>Java对一些底层操作系统或者某些硬件交换信息时，如何用Java来实现在效率上非常低，对于这类方法通常是使用其他语言实现，如C或者C++，我们可以使用System.loadLibrary()来调用Dll。</p>
-<p>######程序计数器<br>程序计数器记录着正在执行的虚拟机字节码指令地址，如果执行的本地方法，则程序计数器为Undefined，因为只保存当前指令的地址，所以不会存在内存溢出的问题，也是唯一一个没有定义OOM的区域。</p>
+        <h3 id="JVM内存区域"><a href="#JVM内存区域" class="headerlink" title="JVM内存区域"></a>JVM内存区域</h3><p>了解Java GC之前，必须先搞清楚JVM中内存区域的划分。<br><img src="http://upload-images.jianshu.io/upload_images/1239929-57cecd7aa84dbb81.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/500" alt="JVM内存区域图"><br>JVM中内存区域大致可分为如上图所示几大区域。其中：</p>
+<a id="more"></a> 
+<h5 id="堆区"><a href="#堆区" class="headerlink" title="堆区"></a>堆区</h5><p>JVM只有一个堆，堆区是JVM内存管理中最大的一块，也是GC主要工作区域，是线程共享的。堆区的主要作用是存储对象实例，一般来说，所有的对象都在堆上分配内存。</p>
+<h5 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h5><p>JVM方法区又称静态区，存放所有的class和静态变量、final常量。在HotSpot虚拟机中也被称为持久代，线程共享。</p>
+<p>在JDK8 HotSpot JVM将会出现持久代的替代者：元空间（Metaspace），这样一来我们就再也看不到<code>java.lang.OutOfMemoryError: PermGen Space</code>的异常了。</p>
+<h5 id="虚拟机栈"><a href="#虚拟机栈" class="headerlink" title="虚拟机栈"></a>虚拟机栈</h5><p>线程的每个方法在执行的同时都会创建一个栈桢，栈桢中存储的有局部变量表，操作数栈，方法出口等，当方法被调用时，栈桢在JVM栈中入栈，当方法执行结束的时候，栈桢出栈。<br>局部变量表中存储着方法的相关局部变量，包括各种基本数据类型，对象的引用，返回的地址等，在局部变量表中在编译是就已经确定好的，方法在运行时所需要分配的空间在栈桢中完全确定的，在方法生命周期内都不会改变。<br>虚拟机栈中会出现2种异常：StatckOverFlowError 和 OutOfMemoryError；当线程调用的栈深度大于虚拟机允许的最大深度，则抛出StatckOverFlowError，如无限递归，就容易出现这个问题。线程不断的申请内存空间，直至内存不足，会抛出OutOfMemoryError异常，如无限循环申请内存空间就会导致OOM异常。</p>
+<h5 id="本地方法栈"><a href="#本地方法栈" class="headerlink" title="本地方法栈"></a>本地方法栈</h5><p>本地方法栈的作用和虚拟机栈很多方面都相同，唯一的区别是：虚拟机栈是执行Java方法的，而本地方法栈是执行native方法的。线程私有。<br>Java对一些底层操作系统或者某些硬件交换信息时，如何用Java来实现在效率上非常低，对于这类方法通常是使用其他语言实现，如C或者C++，我们可以使用System.loadLibrary()来调用Dll。</p>
+<h5 id="程序计数器"><a href="#程序计数器" class="headerlink" title="程序计数器"></a>程序计数器</h5><p>程序计数器记录着正在执行的虚拟机字节码指令地址，如果执行的本地方法，则程序计数器为Undefined，因为只保存当前指令的地址，所以不会存在内存溢出的问题，也是唯一一个没有定义OOM的区域。</p>
 <h3 id="JAVA-GC-算法"><a href="#JAVA-GC-算法" class="headerlink" title="JAVA GC 算法"></a>JAVA GC 算法</h3><p>　Java GC（垃圾回收)机制是一种和垃圾回收的自动内存管理机制。GC机制对JVM中的内存进行标记，并确定哪些内存需要回收，根据一定的回收策略，自动的回收内存，保证JVM中的内存空间，防止出现内存泄露和溢出问题。</p>
-<h6 id="GC的评价标准"><a href="#GC的评价标准" class="headerlink" title="GC的评价标准"></a>GC的评价标准</h6><ul>
+<h5 id="GC的评价标准"><a href="#GC的评价标准" class="headerlink" title="GC的评价标准"></a>GC的评价标准</h5><ul>
 <li>吞吐量</li>
 <li>最大暂停时间（stop the world）</li>
 <li>堆使用效率</li>
 <li>访问的局部性</li>
 </ul>
-<h6 id="GC算法"><a href="#GC算法" class="headerlink" title="GC算法"></a>GC算法</h6><p>在JAVA中GC算法主要分为3种，GC标记-清除算法、引用计数算法、GC复制算法，其他的GC算法多数都是以上GC算法的组合和应用。</p>
+<h5 id="GC算法"><a href="#GC算法" class="headerlink" title="GC算法"></a>GC算法</h5><p>在JAVA中GC算法主要分为3种，GC标记-清除算法、引用计数算法、GC复制算法，其他的GC算法多数都是以上GC算法的组合和应用。</p>
 <p><strong><em>GC标记-清除算法</em></strong></p>
 <p>标记阶段：递归标记堆中指针数组能够访问的对象，将每个活动对象打上mark。<br>清除阶段：遍历堆将没有标记的对象，将其回收(将其连接到空闲链表上)。<br>再分配阶段：遍历空闲链表，寻找大于或等于待分配的size的分块。大小相等直接返回，大于则分割，剩余返回空闲链表<br>合并阶段：将连续空闲分块合并。</p>
 <blockquote>
@@ -449,9 +451,9 @@
 </blockquote>
 <p><strong><em>增量式GC算法</em></strong></p>
 <p>增量GC名称的由来跟全量GC相对，就是每次只处理一小部分的对象。把GC堆切分为很多小块（叫做chunk或者region），然后每次GC增量式对一部分小块做回收（而不必对整个GC堆做回收），这样就把一次大收集拆分成了多次小的增量式收集，减小了每次收集的工作量——也就减小了GC暂停时间。hotspot JVM 用 train GC作为增量式GC的实现，但后面被废弃了。目前G1垃圾收集器，采用的是增量式GC的算法。</p>
-<h3 id="HotSpot-JVM-GC-机制"><a href="#HotSpot-JVM-GC-机制" class="headerlink" title="HotSpot JVM GC 机制"></a>HotSpot JVM GC 机制</h3><p>HotSpot JVM 大致可分为：年轻代（Young Generation）、年老代（Old Generation）、永久代（Permanent Generation，也就是方法区）。我们创建的对象在其生命周期基本上活动在这几块区域中。</p>
-<h6 id="年轻代（Young-Generation）"><a href="#年轻代（Young-Generation）" class="headerlink" title="年轻代（Young Generation）"></a>年轻代（Young Generation）</h6><p>年轻代又可以细分为：Eden区、Survivor 区（From区、To区）默认比例：Eden：from：To = 8:1:1。当我们创建一个对象时，JVM首先将对象分配在eden区，其中大部分对象在该区域死亡，成为垃圾对象。当Eden区内存空间不足，年轻代将执行Young GC回收垃圾对象，在此阶段，年轻代利用Survivor 区GC复制算法来收集垃圾。经过几次Young GC 仍然存活的对象，将根据相关策略晋升至年老代。</p>
-<h6 id="年老代（Old-Generation）"><a href="#年老代（Old-Generation）" class="headerlink" title="年老代（Old Generation）"></a>年老代（Old Generation）</h6><p>对象如果在年轻代存活了足够长的时间而没有被清理掉（即在几次Young GC后存活了下来），则会被复制到年老代，年老代的空间一般比年轻代大，能存放更多的对象，在年老代上发生的GC次数也比年轻代少。当年老代内存不足时，将执行 Full GC。如果对象比较大（比如长字符串或大数组），Young空间不足，则大对象会直接分配到老年代上（大对象可能触发提前GC，应少用，更应避免使用短命的大对象）。　</p>
+<h3 id="HotSpot-JVM-GC-机制"><a href="#HotSpot-JVM-GC-机制" class="headerlink" title="HotSpot JVM GC 机制"></a>HotSpot JVM GC 机制</h3><p>HotSpot JVM 大致可分为：年轻代（Young Generation）、年老代（Old Generation）、永久代（Permanent Generation，也就是方法区，JDK1.8将被元空间（Metaspace）替代）。我们创建的对象在其生命周期基本上活动在这几块区域中。</p>
+<h5 id="年轻代（Young-Generation）"><a href="#年轻代（Young-Generation）" class="headerlink" title="年轻代（Young Generation）"></a>年轻代（Young Generation）</h5><p>年轻代又可以细分为：Eden区、Survivor 区（From区、To区）默认比例：Eden：from：To = 8:1:1。当我们创建一个对象时，JVM首先将对象分配在eden区，其中大部分对象在该区域死亡，成为垃圾对象。当Eden区内存空间不足，年轻代将执行Young GC回收垃圾对象，在此阶段，年轻代利用Survivor 区GC复制算法来收集垃圾。经过几次Young GC 仍然存活的对象，将根据相关策略晋升至年老代。</p>
+<h5 id="年老代（Old-Generation）"><a href="#年老代（Old-Generation）" class="headerlink" title="年老代（Old Generation）"></a>年老代（Old Generation）</h5><p>对象如果在年轻代存活了足够长的时间而没有被清理掉（即在几次Young GC后存活了下来），则会被复制到年老代，年老代的空间一般比年轻代大，能存放更多的对象，在年老代上发生的GC次数也比年轻代少。当年老代内存不足时，将执行 Full GC。如果对象比较大（比如长字符串或大数组），Young空间不足，则大对象会直接分配到老年代上（大对象可能触发提前GC，应少用，更应避免使用短命的大对象）。　</p>
 <p>显然HotSpot JVM 的GC机制的基本算法是：分代收集算法。在年轻代中的Young GC使用的GC复制算法；在年老代中，将使用标记-清除算法、标记-压缩算法；对于方法区（永生代）中，常量池中的常量，无用的类信息，没有引用了就可以被回收，但回收不是必须的。</p>
 <h3 id="垃圾收集器"><a href="#垃圾收集器" class="headerlink" title="垃圾收集器"></a>垃圾收集器</h3><p>在年轻代执行GC的时候，所有的线程都将会暂停工作（stop the world）,尽管各种GC收集器都在不断优化减少暂停时间，但目前为止GC的暂停时间还是存在的。</p>
 <p><strong><em> Serial收集器</em></strong>：新生代收集器，串行收集器。使用复制算法，使用一个线程进行GC，其它工作线程暂停。使用-XX:+UseSerialGC可以使用Serial+Serial Old模式运行进行内存回收（这也是虚拟机在Client模式下运行的默认值）。GC触发机制：之前Young GC晋级到年老代的平均大小 &lt; 年老代的剩余空间 &lt; eden+from Survivor的使用空间。当HandlePromotionFailure为true，则仅触发Young gc；如为false，则触发Full GC。</p>
@@ -714,7 +716,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#JVM内存区域"><span class="nav-number">1.</span> <span class="nav-text">JVM内存区域</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JAVA-GC-算法"><span class="nav-number">2.</span> <span class="nav-text">JAVA GC 算法</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#GC的评价标准"><span class="nav-number">2.0.0.1.</span> <span class="nav-text">GC的评价标准</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#GC算法"><span class="nav-number">2.0.0.2.</span> <span class="nav-text">GC算法</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HotSpot-JVM-GC-机制"><span class="nav-number">3.</span> <span class="nav-text">HotSpot JVM GC 机制</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#年轻代（Young-Generation）"><span class="nav-number">3.0.0.1.</span> <span class="nav-text">年轻代（Young Generation）</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#年老代（Old-Generation）"><span class="nav-number">3.0.0.2.</span> <span class="nav-text">年老代（Old Generation）</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#垃圾收集器"><span class="nav-number">4.</span> <span class="nav-text">垃圾收集器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GC监控"><span class="nav-number">5.</span> <span class="nav-text">GC监控</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#JVM内存区域"><span class="nav-number">1.</span> <span class="nav-text">JVM内存区域</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#堆区"><span class="nav-number">1.0.1.</span> <span class="nav-text">堆区</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#方法区"><span class="nav-number">1.0.2.</span> <span class="nav-text">方法区</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#虚拟机栈"><span class="nav-number">1.0.3.</span> <span class="nav-text">虚拟机栈</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#本地方法栈"><span class="nav-number">1.0.4.</span> <span class="nav-text">本地方法栈</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#程序计数器"><span class="nav-number">1.0.5.</span> <span class="nav-text">程序计数器</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JAVA-GC-算法"><span class="nav-number">2.</span> <span class="nav-text">JAVA GC 算法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#GC的评价标准"><span class="nav-number">2.0.1.</span> <span class="nav-text">GC的评价标准</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#GC算法"><span class="nav-number">2.0.2.</span> <span class="nav-text">GC算法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HotSpot-JVM-GC-机制"><span class="nav-number">3.</span> <span class="nav-text">HotSpot JVM GC 机制</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#年轻代（Young-Generation）"><span class="nav-number">3.0.1.</span> <span class="nav-text">年轻代（Young Generation）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#年老代（Old-Generation）"><span class="nav-number">3.0.2.</span> <span class="nav-text">年老代（Old Generation）</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#垃圾收集器"><span class="nav-number">4.</span> <span class="nav-text">垃圾收集器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GC监控"><span class="nav-number">5.</span> <span class="nav-text">GC监控</span></a></li></ol></div>
             
 
           </div>
