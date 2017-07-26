@@ -280,7 +280,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://lishuo.me/2017/04/13/源码分析之LinkedList/">
+    <link itemprop="mainEntityOfPage" href="http://lishuo.me/2017/04/16/cj5kr8zfk001esnxp1iglcpzy/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="特立独行的猪手">
@@ -302,7 +302,162 @@
             
               
                 
-                <a class="post-title-link" href="/2017/04/13/源码分析之LinkedList/" itemprop="url">
+                <a class="post-title-link" href="/2017/04/16/cj5kr8zfk001esnxp1iglcpzy/" itemprop="url">
+                  源码分析之HashMap
+                </a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-16T12:37:13+08:00">
+                2017-04-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/源码分析/" itemprop="url" rel="index">
+                    <span itemprop="name">源码分析</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/04/16/cj5kr8zfk001esnxp1iglcpzy/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/04/16/cj5kr8zfk001esnxp1iglcpzy/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p><code>HashMap</code>是<code>Java Collections Framework</code>中<code>Map</code>集合的一种实现。<code>HashMap</code>提供了一种简单实用的数据存储和读取方式。<code>Map</code>接口不同于<code>List</code>接口，属于集合框架的另一条支线，<code>Map</code>提供了键值对<code>K-V</code>数据存储模型，底层则是通过<code>Hash</code>表存储。</p>
+<p>本文分析基于<code>JDK1.8</code>。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/04/16/cj5kr8zfk001esnxp1iglcpzy/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://lishuo.me/2017/04/13/cj5kr8zfs001msnxpvv1wp1t1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="特立独行的猪手">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://i1.piimg.com/567571/989180cb5486364b.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lis`s  Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/04/13/cj5kr8zfs001msnxpvv1wp1t1/" itemprop="url">
                   源码分析之LinkedList
                 </a>
               
@@ -360,8 +515,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/04/13/源码分析之LinkedList/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/04/13/源码分析之LinkedList/" itemprop="commentCount"></span>
+                <a href="/2017/04/13/cj5kr8zfs001msnxpvv1wp1t1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/04/13/cj5kr8zfs001msnxpvv1wp1t1/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -391,7 +546,7 @@
           <h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p><code>LinkedList</code>是<code>Java Collections Framework</code>中<code>List</code>接口一种实现。不同于<code>ArrayList</code>的是<code>LinkedList</code>是基于双向链表实现的。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/04/13/源码分析之LinkedList/#more" rel="contents">
+            <a class="btn" href="/2017/04/13/cj5kr8zfs001msnxpvv1wp1t1/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -434,7 +589,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://lishuo.me/2017/04/12/源码分析之ArrayList/">
+    <link itemprop="mainEntityOfPage" href="http://lishuo.me/2017/04/12/cj5kr8zfd0016snxph6yjzetd/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="特立独行的猪手">
@@ -456,7 +611,7 @@
             
               
                 
-                <a class="post-title-link" href="/2017/04/12/源码分析之ArrayList/" itemprop="url">
+                <a class="post-title-link" href="/2017/04/12/cj5kr8zfd0016snxph6yjzetd/" itemprop="url">
                   源码分析之ArrayList
                 </a>
               
@@ -514,8 +669,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/04/12/源码分析之ArrayList/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/04/12/源码分析之ArrayList/" itemprop="commentCount"></span>
+                <a href="/2017/04/12/cj5kr8zfd0016snxph6yjzetd/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/04/12/cj5kr8zfd0016snxph6yjzetd/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -548,7 +703,7 @@
 <p><code>ArrayList</code>继承与<code>AbstractList</code>。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/04/12/源码分析之ArrayList/#more" rel="contents">
+            <a class="btn" href="/2017/04/12/cj5kr8zfd0016snxph6yjzetd/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -591,7 +746,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://lishuo.me/2017/04/10/【翻译】集合框架概述/">
+    <link itemprop="mainEntityOfPage" href="http://lishuo.me/2017/04/10/cj5kr8zey000jsnxpsszzjh3n/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="特立独行的猪手">
@@ -613,7 +768,7 @@
             
               
                 
-                <a class="post-title-link" href="/2017/04/10/【翻译】集合框架概述/" itemprop="url">
+                <a class="post-title-link" href="/2017/04/10/cj5kr8zey000jsnxpsszzjh3n/" itemprop="url">
                   【翻译】集合框架概述
                 </a>
               
@@ -671,8 +826,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/04/10/【翻译】集合框架概述/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/04/10/【翻译】集合框架概述/" itemprop="commentCount"></span>
+                <a href="/2017/04/10/cj5kr8zey000jsnxpsszzjh3n/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/04/10/cj5kr8zey000jsnxpsszzjh3n/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -703,7 +858,7 @@
 <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p><code>Java</code>平台中有一个集合框架<code>collections framework</code>。集合表示一组对象集的对象（例如经典的<code>Vector</code>类)。集合框架用来表示和操作集合的统一架构，可以抛开实现细节来操作集合。集合框架主要的有点如下所示：</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/04/10/【翻译】集合框架概述/#more" rel="contents">
+            <a class="btn" href="/2017/04/10/cj5kr8zey000jsnxpsszzjh3n/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -746,7 +901,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://lishuo.me/2017/04/07/源码分析之ThreadPoolExecutor/">
+    <link itemprop="mainEntityOfPage" href="http://lishuo.me/2017/04/07/cj5kr8zg30024snxp8lw81ryh/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="特立独行的猪手">
@@ -768,7 +923,7 @@
             
               
                 
-                <a class="post-title-link" href="/2017/04/07/源码分析之ThreadPoolExecutor/" itemprop="url">
+                <a class="post-title-link" href="/2017/04/07/cj5kr8zg30024snxp8lw81ryh/" itemprop="url">
                   源码分析之ThreadPoolExecutor
                 </a>
               
@@ -826,8 +981,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/04/07/源码分析之ThreadPoolExecutor/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/04/07/源码分析之ThreadPoolExecutor/" itemprop="commentCount"></span>
+                <a href="/2017/04/07/cj5kr8zg30024snxp8lw81ryh/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/04/07/cj5kr8zg30024snxp8lw81ryh/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -858,7 +1013,7 @@
 <p>在<code>Java</code>中一般来说通过<code>Executors</code>来创建所需要的线程池，如：<code>Executors.newFixedThreadPool</code>、<code>Executors.newScheduledThreadPool</code>等等。而其中一种主要的实现就是<code>ThreadPoolExecutor</code>。<code>ThreadPoolExecutor</code>是<code>J.U.C</code>包下的，当然也是出自大神<code>Doug Lea</code>之手。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/04/07/源码分析之ThreadPoolExecutor/#more" rel="contents">
+            <a class="btn" href="/2017/04/07/cj5kr8zg30024snxp8lw81ryh/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -901,7 +1056,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://lishuo.me/2017/03/31/设计模式系列-抽象工厂模式/">
+    <link itemprop="mainEntityOfPage" href="http://lishuo.me/2017/03/31/cj5kr8zg1001zsnxpl0kuvz8m/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="特立独行的猪手">
@@ -923,7 +1078,7 @@
             
               
                 
-                <a class="post-title-link" href="/2017/03/31/设计模式系列-抽象工厂模式/" itemprop="url">
+                <a class="post-title-link" href="/2017/03/31/cj5kr8zg1001zsnxpl0kuvz8m/" itemprop="url">
                   设计模式系列-抽象工厂模式
                 </a>
               
@@ -981,8 +1136,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/03/31/设计模式系列-抽象工厂模式/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/03/31/设计模式系列-抽象工厂模式/" itemprop="commentCount"></span>
+                <a href="/2017/03/31/cj5kr8zg1001zsnxpl0kuvz8m/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/03/31/cj5kr8zg1001zsnxpl0kuvz8m/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1019,7 +1174,7 @@
 <h1 id="抽象工厂模式"><a href="#抽象工厂模式" class="headerlink" title="抽象工厂模式"></a>抽象工厂模式</h1><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>抽象工厂模式是围绕一个超级工厂创建其他工厂。该超级工厂又称为其他工厂的工厂。在抽象工厂中，接口是负责创建相关对象的工厂，不需要显示指定他们的类。提供了一种创建对象的最佳方式。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/03/31/设计模式系列-抽象工厂模式/#more" rel="contents">
+            <a class="btn" href="/2017/03/31/cj5kr8zg1001zsnxpl0kuvz8m/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1062,7 +1217,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://lishuo.me/2017/03/29/设计模式系列-简单工厂模式/">
+    <link itemprop="mainEntityOfPage" href="http://lishuo.me/2017/03/29/cj5kr8zg8002bsnxpf8fisj8c/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="特立独行的猪手">
@@ -1084,7 +1239,7 @@
             
               
                 
-                <a class="post-title-link" href="/2017/03/29/设计模式系列-简单工厂模式/" itemprop="url">
+                <a class="post-title-link" href="/2017/03/29/cj5kr8zg8002bsnxpf8fisj8c/" itemprop="url">
                   设计模式系列-简单工厂模式
                 </a>
               
@@ -1142,8 +1297,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/03/29/设计模式系列-简单工厂模式/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/03/29/设计模式系列-简单工厂模式/" itemprop="commentCount"></span>
+                <a href="/2017/03/29/cj5kr8zg8002bsnxpf8fisj8c/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/03/29/cj5kr8zg8002bsnxpf8fisj8c/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1179,7 +1334,7 @@
 <h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>简单工厂模式又叫做静态工厂方法模式，是常用的实例化对象模式。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/03/29/设计模式系列-简单工厂模式/#more" rel="contents">
+            <a class="btn" href="/2017/03/29/cj5kr8zg8002bsnxpf8fisj8c/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1222,7 +1377,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://lishuo.me/2017/03/27/源码分析之AbstractQueuedSynchronizer/">
+    <link itemprop="mainEntityOfPage" href="http://lishuo.me/2017/03/27/cj5kr8zfa0013snxpqudp81vq/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="特立独行的猪手">
@@ -1244,7 +1399,7 @@
             
               
                 
-                <a class="post-title-link" href="/2017/03/27/源码分析之AbstractQueuedSynchronizer/" itemprop="url">
+                <a class="post-title-link" href="/2017/03/27/cj5kr8zfa0013snxpqudp81vq/" itemprop="url">
                   源码分析之AbstractQueuedSynchronizer
                 </a>
               
@@ -1302,8 +1457,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/03/27/源码分析之AbstractQueuedSynchronizer/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/03/27/源码分析之AbstractQueuedSynchronizer/" itemprop="commentCount"></span>
+                <a href="/2017/03/27/cj5kr8zfa0013snxpqudp81vq/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/03/27/cj5kr8zfa0013snxpqudp81vq/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1339,7 +1494,7 @@
 </ul>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/03/27/源码分析之AbstractQueuedSynchronizer/#more" rel="contents">
+            <a class="btn" href="/2017/03/27/cj5kr8zfa0013snxpqudp81vq/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1382,7 +1537,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://lishuo.me/2017/03/22/源码分析之ReentrantLock/">
+    <link itemprop="mainEntityOfPage" href="http://lishuo.me/2017/03/22/cj5kr8zfu001qsnxp257bu13l/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="特立独行的猪手">
@@ -1404,7 +1559,7 @@
             
               
                 
-                <a class="post-title-link" href="/2017/03/22/源码分析之ReentrantLock/" itemprop="url">
+                <a class="post-title-link" href="/2017/03/22/cj5kr8zfu001qsnxp257bu13l/" itemprop="url">
                   源码分析之ReentrantLock
                 </a>
               
@@ -1462,8 +1617,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/03/22/源码分析之ReentrantLock/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/03/22/源码分析之ReentrantLock/" itemprop="commentCount"></span>
+                <a href="/2017/03/22/cj5kr8zfu001qsnxp257bu13l/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/03/22/cj5kr8zfu001qsnxp257bu13l/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1493,7 +1648,7 @@
           <p><code>ReentrantLock</code>类是属于<code>java.util.concurrent</code>的。实现了<code>Lock, java.io.Serializable</code>两个接口，是一个可重入的互斥锁，所谓可重入是线程可以重复获取已经持有的锁。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/03/22/源码分析之ReentrantLock/#more" rel="contents">
+            <a class="btn" href="/2017/03/22/cj5kr8zfu001qsnxp257bu13l/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1536,7 +1691,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://lishuo.me/2017/03/19/源码分析之AtomicInteger/">
+    <link itemprop="mainEntityOfPage" href="http://lishuo.me/2017/03/19/cj5kr8zfi001csnxpnlglz703/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="特立独行的猪手">
@@ -1558,7 +1713,7 @@
             
               
                 
-                <a class="post-title-link" href="/2017/03/19/源码分析之AtomicInteger/" itemprop="url">
+                <a class="post-title-link" href="/2017/03/19/cj5kr8zfi001csnxpnlglz703/" itemprop="url">
                   源码分析之AtomicInteger
                 </a>
               
@@ -1616,8 +1771,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/03/19/源码分析之AtomicInteger/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/03/19/源码分析之AtomicInteger/" itemprop="commentCount"></span>
+                <a href="/2017/03/19/cj5kr8zfi001csnxpnlglz703/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/03/19/cj5kr8zfi001csnxpnlglz703/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1648,166 +1803,7 @@
 <p>我们知道在<code>Java</code>中，<code>i++、++i</code>这种操作并不是线程安全的。主要是因为类似于<code>++</code>操作会被编译为2条操作指令，而多线程环境下CPU在执行过程可能会中断切换到别的线程，无法保证2条操作指令的原子性，所以是线程不安全。针对这种情况，我们可能会想到利用<code>synchronize</code>关键字实现线程同步，保证<code>++</code>操作的原子性，的确这是一种有效的方法，但我们还有一种选择–<code>AtomicInteger</code>。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/03/19/源码分析之AtomicInteger/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://lishuo.me/2017/03/18/设计模式系列-模板方法模式/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="特立独行的猪手">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://i1.piimg.com/567571/989180cb5486364b.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Lis`s  Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/03/18/设计模式系列-模板方法模式/" itemprop="url">
-                  设计模式系列-模板方法模式
-                </a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-18T18:39:57+08:00">
-                2017-03-18
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/设计模式/" itemprop="url" rel="index">
-                    <span itemprop="name">设计模式</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/03/18/设计模式系列-模板方法模式/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/03/18/设计模式系列-模板方法模式/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h4 id="JAVA设计模式系列："><a href="#JAVA设计模式系列：" class="headerlink" title="JAVA设计模式系列："></a>JAVA设计模式系列：</h4><ul>
-<li><a href="https://github.com/lishuo9527/JavaDesignPatterns/tree/master/Singleton">单例模式</a></li>
-<li><a href="https://github.com/lishuo9527/JavaDesignPatterns/tree/master/Observer">观察者模式</a></li>
-<li><a href="https://github.com/lishuo9527/JavaDesignPatterns/tree/master/TemplateMethod">模板方法模式</a></li>
-</ul>
-<h1 id="模板方法模式"><a href="#模板方法模式" class="headerlink" title="模板方法模式"></a>模板方法模式</h1><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>模板方法模式在一个方法中定义了算法的骨架，把其中的某些步骤延迟到子类的实现，是为我们提供了代码复用的一种重要的技巧。模板方法使得子类可以在不改变算法结构的情况下，重新定义算法中的某些步骤。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/03/18/设计模式系列-模板方法模式/#more" rel="contents">
+            <a class="btn" href="/2017/03/19/cj5kr8zfi001csnxpnlglz703/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1890,7 +1886,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">33</span>
+                <span class="site-state-item-count">34</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1901,7 +1897,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-count">10</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -1912,7 +1908,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-count">9</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
