@@ -1,0 +1,951 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Java,SpringMVC,源码分析," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="http://i1.piimg.com/567571/989180cb5486364b.jpg?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="SpringMVC框架是Spring框架中web模块，时下常用来构建web应用。在应用之余，也一直想要搞明白SpringMVC中是如何接受处理请求的？
+SpingMVC 初始化Spring框架和其他框架类似，都是配置元素集中于xml配置文件中，在框架初始化的时候，加载配置文件，解析文件，生成对应的配置。SpringMVC框架是依托于Spring容器。Spring初始化的过程其实就是IoC容器启动的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringMVC源码分析-DispatcherServlet">
+<meta property="og:url" content="http://lishuo.me/2017/07/24/cj64t4lx80008q0xpsvdgmmer/index.html">
+<meta property="og:site_name" content="Lis`s  Blog">
+<meta property="og:description" content="SpringMVC框架是Spring框架中web模块，时下常用来构建web应用。在应用之余，也一直想要搞明白SpringMVC中是如何接受处理请求的？
+SpingMVC 初始化Spring框架和其他框架类似，都是配置元素集中于xml配置文件中，在框架初始化的时候，加载配置文件，解析文件，生成对应的配置。SpringMVC框架是依托于Spring容器。Spring初始化的过程其实就是IoC容器启动的">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNc79gy1fhw9dupdjhj30g60ewdhh.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79gy1fhw9yvqupbj30oi0dajsa.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79gy1fhvys33c92j30m80e9abr.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcgy1fhxbhd0bxmj30nw0bagnf.jpg">
+<meta property="og:updated_time" content="2017-08-09T09:22:05.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SpringMVC源码分析-DispatcherServlet">
+<meta name="twitter:description" content="SpringMVC框架是Spring框架中web模块，时下常用来构建web应用。在应用之余，也一直想要搞明白SpringMVC中是如何接受处理请求的？
+SpingMVC 初始化Spring框架和其他框架类似，都是配置元素集中于xml配置文件中，在框架初始化的时候，加载配置文件，解析文件，生成对应的配置。SpringMVC框架是依托于Spring容器。Spring初始化的过程其实就是IoC容器启动的">
+<meta name="twitter:image" content="https://ws4.sinaimg.cn/large/006tNc79gy1fhw9dupdjhj30g60ewdhh.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://lishuo.me/2017/07/24/cj64t4lx80008q0xpsvdgmmer/"/>
+
+
+
+
+
+  <title> SpringMVC源码分析-DispatcherServlet | Lis`s  Blog </title>
+  <meta name="baidu-site-verification" content="xd9p2Pbnya" />
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?04c3d6bbc9cc999595dba945a9475b5a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Lis`s  Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">一盘炒猪肝 二两黄酒 黄酒温一温</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://lishuo.me/2017/07/24/cj64t4lx80008q0xpsvdgmmer/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="特立独行的猪手">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://i1.piimg.com/567571/989180cb5486364b.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lis`s  Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+            
+            
+              
+                SpringMVC源码分析-DispatcherServlet
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-24T19:01:31+08:00">
+                2017-07-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/源码分析/" itemprop="url" rel="index">
+                    <span itemprop="name">源码分析</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/源码分析/SpringMVC/" itemprop="url" rel="index">
+                    <span itemprop="name">SpringMVC</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/07/24/cj64t4lx80008q0xpsvdgmmer/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/07/24/cj64t4lx80008q0xpsvdgmmer/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-eye"></i>本文总阅读量
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><code>SpringMVC</code>框架是<code>Spring</code>框架中<code>web</code>模块，时下常用来构建<code>web</code>应用。在应用之余，也一直想要搞明白<code>SpringMVC</code>中是如何接受处理请求的？</p>
+<h3 id="SpingMVC-初始化"><a href="#SpingMVC-初始化" class="headerlink" title="SpingMVC 初始化"></a>SpingMVC 初始化</h3><p><code>Spring</code>框架和其他框架类似，都是配置元素集中于xml配置文件中，在框架初始化的时候，加载配置文件，解析文件，生成对应的配置。<code>SpringMVC</code>框架是依托于<code>Spring</code>容器。<code>Spring</code>初始化的过程其实就是<code>IoC</code>容器启动的过程，也就是上下文建立的过程。</p>
+<a id="more"></a>
+<h4 id="ServletContext"><a href="#ServletContext" class="headerlink" title="ServletContext"></a>ServletContext</h4><p>每一个web应用中都有一个Servlet上下文。<code>servlet</code>容器提供一个全局上下文的环境，这个上下文环境将成为其他<code>IoC</code>容器的宿主环境，例如：<code>WebApplicationContext</code>就是作为<code>ServletContext</code>的一个属性存在。</p>
+<h4 id="WebApplicationContext"><a href="#WebApplicationContext" class="headerlink" title="WebApplicationContext"></a>WebApplicationContext</h4><h5 id="context-param"><a href="#context-param" class="headerlink" title="context-param"></a>context-param</h5><p>在使用<code>SpringMVC</code>的时候，通常需要在<code>web.xml</code>文件中配置<code>context-param</code>。<code>context-param</code>通常可以用来设置<code>Spring</code>的<code>contextConfigLocation</code>。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">context-param</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">param-name</span>&gt;</span>contextConfigLocation<span class="tag">&lt;/<span class="name">param-name</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">param-value</span>&gt;</span>xxx.xml,xxx.xml<span class="tag">&lt;/<span class="name">param-value</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">context-param</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>当然也可以不配置<code>contextConfigLocation</code>，默认的是<code>/WEB-INF/applicationContext.xml</code>。如果没有设置的话，默认会传入<code>WEB-INF</code>文件夹中包含<code>*Context.xml, spring*.xml</code>或者<code>/**/*Context.xml</code>的文件。</p>
+<h5 id="listener"><a href="#listener" class="headerlink" title="listener"></a>listener</h5><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">listener</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">listener-class</span>&gt;</span>org.springframework.web.context.ContextLoaderListener<span class="tag">&lt;/<span class="name">listener-class</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">listener</span>&gt;</span></div></pre></td></tr></table></figure>
+<p><code>ContextLoaderListener</code> 实现了<code>ServletContextListener</code>接口，在<code>SpringMVC</code>中作为监听器的存在，当<code>servlet</code>容器启动时候，会调用<code>contextInitialized</code>进行一些初始化的工作。而<code>ContextLoaderListener</code>中<code>contextInitialized</code>的具体实现在父类<code>ContextLoader</code>类中。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">try</span> &#123;</div><div class="line">	<span class="comment">// Store context in local instance variable, to guarantee that</span></div><div class="line">	<span class="comment">// it is available on ServletContext shutdown.</span></div><div class="line">	<span class="keyword">if</span> (<span class="keyword">this</span>.context == <span class="keyword">null</span>) &#123;</div><div class="line">		<span class="keyword">this</span>.context = createWebApplicationContext(servletContext);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">if</span> (<span class="keyword">this</span>.context <span class="keyword">instanceof</span> ConfigurableWebApplicationContext) &#123;</div><div class="line">		ConfigurableWebApplicationContext cwac = (ConfigurableWebApplicationContext) <span class="keyword">this</span>.context;</div><div class="line">		<span class="keyword">if</span> (!cwac.isActive()) &#123;</div><div class="line">			<span class="comment">// The context has not yet been refreshed -&gt; provide services such as</span></div><div class="line">			<span class="comment">// setting the parent context, setting the application context id, etc</span></div><div class="line">			<span class="keyword">if</span> (cwac.getParent() == <span class="keyword">null</span>) &#123;</div><div class="line">				<span class="comment">// The context instance was injected without an explicit parent -&gt;</span></div><div class="line">				<span class="comment">// determine parent for root web application context, if any.</span></div><div class="line">				ApplicationContext parent = loadParentContext(servletContext);</div><div class="line">				cwac.setParent(parent);</div><div class="line">			&#125;</div><div class="line">			configureAndRefreshWebApplicationContext(cwac, servletContext);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	servletContext.setAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE, <span class="keyword">this</span>.context);</div></pre></td></tr></table></figure>
+<p>上面的部分代码可以看出，初始化时候通过<code>createWebApplicationContext(servletContext);</code>声明一个<code>WebApplicationContext</code>并赋值给<code>ServletContext</code>的<code>org.springframework.web.context.WebApplicationContext.ROOT</code>属性，作为<code>WebApplicationContext</code>的根上下文（root context）。</p>
+<h4 id="DispatcherServlet"><a href="#DispatcherServlet" class="headerlink" title="DispatcherServlet"></a>DispatcherServlet</h4><p>在加载完<code>&lt;context-param&gt;</code>和<code>&lt;listener&gt;</code>之后，容器将加载配置了<code>load-on-startup</code>的<code>servlet</code>。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">servlet</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>example<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">servlet-class</span>&gt;</span>org.springframework.web.servlet.DispatcherServlet<span class="tag">&lt;/<span class="name">servlet-class</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">init-param</span>&gt;</span></div><div class="line">       <span class="tag">&lt;<span class="name">param-name</span>&gt;</span>contextConfigLocation<span class="tag">&lt;/<span class="name">param-name</span>&gt;</span></div><div class="line">       <span class="tag">&lt;<span class="name">param-value</span>&gt;</span>***.xml<span class="tag">&lt;/<span class="name">param-value</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">init-param</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">load-on-startup</span>&gt;</span>1<span class="tag">&lt;/<span class="name">load-on-startup</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">servlet</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">servlet-mapping</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>example<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">url-pattern</span>&gt;</span>/example/*<span class="tag">&lt;/<span class="name">url-pattern</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">servlet-mapping</span>&gt;</span></div></pre></td></tr></table></figure>
+<p><code>DispatcherServlet</code>在初始化的过程中，会建立一个自己的<code>IoC</code>容器上下文<code>Servlet WebApplicationContext</code>，会以<code>ContextLoaderListener</code>建立的根上下文作为自己的父级上下文。<code>DispatcherServlet</code>持有的上下文默认的实现类是<code>XmlWebApplicationContext</code>。</p>
+<p>我们也可以利用<code>servlet</code>默认初始化参数<code>&lt;init-param&gt;</code>配置<code>contextConfigLocation</code>。如果不设置的话，默认会读取<code>/WEB-INF/applicationContext.xml</code>或者<code>/WEB-INF/xxx-servlet.xml</code>的配置。<code>xxx</code>是对应的<code>servlet-name</code>。</p>
+<p><code>Servlet</code>有自己独有的<code>Bean</code>空间，也可以共享父级上下文的共享<code>Bean</code>，当然也存在配置有含有一个<code>root WebApplicationContext</code>配置。其关系如下图所示，后面也还会详细介绍<code>DispatcherServlet</code>这个类。</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1fhw9dupdjhj30g60ewdhh.jpg" alt=""></p>
+<h3 id="DispatcherServlet类"><a href="#DispatcherServlet类" class="headerlink" title="DispatcherServlet类"></a>DispatcherServlet类</h3><p><code>DispatcherServlet</code>最为SpringMVC核心类，起到了前端控制器（Front controller）的作用，负责请求分发等工作。</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79gy1fhw9yvqupbj30oi0dajsa.jpg" alt=""></p>
+<p>从类图中可以看出，<code>DispatcherServlet</code>的继承关系大致如此：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">DispatcherServlet -&gt; FrameworkServlet -&gt; HttpServletBean -&gt; HttpServlet -&gt; GenericServlet</div></pre></td></tr></table></figure>
+<p>从继承关系上可以得出结论，<code>DispatcherServlet</code>本质上还是一个<code>Servlet</code>。<code>Servlet</code>的生命周期大致分为三个阶段：</p>
+<ul>
+<li>初始化阶段 init方法</li>
+<li>处理请求阶段 service方法</li>
+<li>结束阶段 destroy方法</li>
+</ul>
+<p>这里就重点关注<code>DispatcherServlet</code>在这三个阶段具体做了那些工作。</p>
+<h4 id="DispatcherServlet初始化"><a href="#DispatcherServlet初始化" class="headerlink" title="DispatcherServlet初始化"></a>DispatcherServlet初始化</h4><p><code>DispatcherServlet</code>的<code>init()</code>的实现在其父类<code>HttpServletBean</code>中。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">()</span> <span class="keyword">throws</span> ServletException </span>&#123;</div><div class="line">       ...</div><div class="line">	<span class="comment">// Set bean properties from init parameters.</span></div><div class="line">	<span class="keyword">try</span> &#123;</div><div class="line">		PropertyValues pvs = <span class="keyword">new</span> ServletConfigPropertyValues(getServletConfig(), <span class="keyword">this</span>.requiredProperties);</div><div class="line">		BeanWrapper bw = PropertyAccessorFactory.forBeanPropertyAccess(<span class="keyword">this</span>);</div><div class="line">		ResourceLoader resourceLoader = <span class="keyword">new</span> ServletContextResourceLoader(getServletContext());</div><div class="line">		bw.registerCustomEditor(Resource.class, <span class="keyword">new</span> ResourceEditor(resourceLoader, getEnvironment()));</div><div class="line">		initBeanWrapper(bw);</div><div class="line">		bw.setPropertyValues(pvs, <span class="keyword">true</span>);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">catch</span> (BeansException ex) &#123;</div><div class="line">		logger.error(<span class="string">"Failed to set bean properties on servlet '"</span> + getServletName() + <span class="string">"'"</span>, ex);</div><div class="line">		<span class="keyword">throw</span> ex;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="comment">// Let subclasses do whatever initialization they like.</span></div><div class="line">	initServletBean();</div><div class="line"></div><div class="line">       ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>以上部分源码描述的过程是通过读取<code>&lt;init-param&gt;</code>的配置元素，读取到<code>DispatcherServlet</code>中，配置相关<code>bean</code>的配置。完成配置后调用<code>initServletBean</code>方法来创建<code>Servlet WebApplicationContext</code>。</p>
+<p><code>initServletBean</code>方法在<code>FrameworkServlet</code>类中重写了：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">initServletBean</span><span class="params">()</span> <span class="keyword">throws</span> ServletException </span>&#123;</div><div class="line">	...</div><div class="line"></div><div class="line">	<span class="keyword">try</span> &#123;</div><div class="line">		<span class="keyword">this</span>.webApplicationContext = initWebApplicationContext();</div><div class="line">		initFrameworkServlet();</div><div class="line">	&#125;</div><div class="line">	...</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">protected</span> WebApplicationContext <span class="title">initWebApplicationContext</span><span class="params">()</span> </span>&#123;</div><div class="line">	WebApplicationContext rootContext =</div><div class="line">			WebApplicationContextUtils.getWebApplicationContext(getServletContext());</div><div class="line">	WebApplicationContext wac = <span class="keyword">null</span>;</div><div class="line"></div><div class="line">	<span class="keyword">if</span> (<span class="keyword">this</span>.webApplicationContext != <span class="keyword">null</span>) &#123;</div><div class="line">		wac = <span class="keyword">this</span>.webApplicationContext;</div><div class="line">		<span class="keyword">if</span> (wac <span class="keyword">instanceof</span> ConfigurableWebApplicationContext) &#123;</div><div class="line">			ConfigurableWebApplicationContext cwac = (ConfigurableWebApplicationContext) wac;</div><div class="line">			<span class="keyword">if</span> (!cwac.isActive()) &#123;</div><div class="line">				<span class="keyword">if</span> (cwac.getParent() == <span class="keyword">null</span>) &#123;</div><div class="line">					cwac.setParent(rootContext);</div><div class="line">				&#125;</div><div class="line">				configureAndRefreshWebApplicationContext(cwac);</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">if</span> (wac == <span class="keyword">null</span>) &#123;</div><div class="line">		wac = findWebApplicationContext();</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">if</span> (wac == <span class="keyword">null</span>) &#123;</div><div class="line">		wac = createWebApplicationContext(rootContext);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">if</span> (!<span class="keyword">this</span>.refreshEventReceived) &#123;</div><div class="line">		onRefresh(wac);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">if</span> (<span class="keyword">this</span>.publishContext) &#123;</div><div class="line">		String attrName = getServletContextAttributeName();</div><div class="line">		getServletContext().setAttribute(attrName, wac);</div><div class="line">		<span class="keyword">if</span> (<span class="keyword">this</span>.logger.isDebugEnabled()) &#123;</div><div class="line">			<span class="keyword">this</span>.logger.debug(<span class="string">"Published WebApplicationContext of servlet '"</span> + getServletName() +</div><div class="line">					<span class="string">"' as ServletContext attribute with name ["</span> + attrName + <span class="string">"]"</span>);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">return</span> wac;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上文提到<code>Servlet</code>容器在启动的时候，通过<code>ContextLoaderListener</code>创建一个根上下文，并配置到<code>ServletContext</code>中。可以看出<code>FrameworkServlet</code>这个类做的作用是用来创建<code>WebApplicationContext</code>上下文的。大致过程如下：</p>
+<ul>
+<li>首先检查<code>webApplicationContext</code>是否通过构造函数注入，如果有的话，直接使用，并将根上下文设置为父上下文。</li>
+<li>如果<code>webApplicationContext</code>没有注入，则检查是否在<code>ServletContext</code>已经注册过，如果已经注册过，直接返回使用。</li>
+<li>如果没有注册过，将重新新建一个<code>webApplicationContext</code>。将根上下文设置为父级上下文。</li>
+<li>不管是何种策略获取的<code>webApplicationContext</code>，都将会调用<code>onRefresh</code>方法，<code>onRefresh</code>方法会调用<code>initStrategies</code>方法，通过上下文初始化<code>HandlerMappings</code>、<code>HandlerAdapters</code>、<code>ViewResolvers</code>等等。</li>
+<li>最后，同样会将所得<code>webApplicationContext</code>注册到<code>ServletContext</code>中。</li>
+</ul>
+<p>而<code>initFrameworkServlet()</code>默认的实现是空的。这也可算是<code>SpingMVC</code>留的一个扩展点。</p>
+<h4 id="DispatcherServlet处理请求"><a href="#DispatcherServlet处理请求" class="headerlink" title="DispatcherServlet处理请求"></a>DispatcherServlet处理请求</h4><p>纵观<code>SpringMVC</code>的源码，大量运用模板方法的设计模式。<code>Servlet</code>的<code>service</code>方法也不例外。<code>FrameworkServlet</code>类重写<code>service</code>方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Override</span></div><div class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">service</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span></span></div><div class="line">		<span class="keyword">throws</span> ServletException, IOException &#123;</div><div class="line"></div><div class="line">	HttpMethod httpMethod = HttpMethod.resolve(request.getMethod());</div><div class="line">	<span class="keyword">if</span> (HttpMethod.PATCH == httpMethod || httpMethod == <span class="keyword">null</span>) &#123;</div><div class="line">		processRequest(request, response);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">else</span> &#123;</div><div class="line">		<span class="keyword">super</span>.service(request, response);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>如果请求的方法是<code>PATCH</code>或者空，直接调用<code>processRequest</code>方法（后面会详细解释）；否则，将调用父类的<code>service</code>的方法，即<code>HttpServlet</code>的<code>service</code>方法, 而这里会根据请求方法，去调用相应的<code>doGet</code>、<code>doPost</code>、<code>doPut</code>……</p>
+<p>而<code>doXXX</code>系列方法的实现并不是<code>HttpServlet</code>类中，而是在<code>FrameworkServlet</code>类中。在<code>FrameworkServlet</code>中<code>doXXX</code>系列实现中，都调用了上面提到的<code>processRequest</code>方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">processRequest</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span></span></div><div class="line">			<span class="keyword">throws</span> ServletException, IOException &#123;</div><div class="line"></div><div class="line">		<span class="keyword">long</span> startTime = System.currentTimeMillis();</div><div class="line">		Throwable failureCause = <span class="keyword">null</span>;</div><div class="line"></div><div class="line">		LocaleContext previousLocaleContext = LocaleContextHolder.getLocaleContext();</div><div class="line">		LocaleContext localeContext = buildLocaleContext(request);</div><div class="line"></div><div class="line">		RequestAttributes previousAttributes = RequestContextHolder.getRequestAttributes();</div><div class="line">		ServletRequestAttributes requestAttributes = buildRequestAttributes(request, response, previousAttributes);</div><div class="line"></div><div class="line">		WebAsyncManager asyncManager = WebAsyncUtils.getAsyncManager(request);</div><div class="line">		asyncManager.registerCallableInterceptor(FrameworkServlet.class.getName(), <span class="keyword">new</span> RequestBindingInterceptor());</div><div class="line"></div><div class="line">		initContextHolders(request, localeContext, requestAttributes);</div><div class="line"></div><div class="line">		<span class="keyword">try</span> &#123;</div><div class="line">			doService(request, response);</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">catch</span> (ServletException ex) &#123;</div><div class="line">			failureCause = ex;</div><div class="line">			<span class="keyword">throw</span> ex;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">catch</span> (IOException ex) &#123;</div><div class="line">			failureCause = ex;</div><div class="line">			<span class="keyword">throw</span> ex;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">catch</span> (Throwable ex) &#123;</div><div class="line">			failureCause = ex;</div><div class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> NestedServletException(<span class="string">"Request processing failed"</span>, ex);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="keyword">finally</span> &#123;</div><div class="line">			resetContextHolders(request, previousLocaleContext, previousAttributes);</div><div class="line">			<span class="keyword">if</span> (requestAttributes != <span class="keyword">null</span>) &#123;</div><div class="line">				requestAttributes.requestCompleted();</div><div class="line">			&#125;</div><div class="line"></div><div class="line">			<span class="keyword">if</span> (logger.isDebugEnabled()) &#123;</div><div class="line">				<span class="keyword">if</span> (failureCause != <span class="keyword">null</span>) &#123;</div><div class="line">					<span class="keyword">this</span>.logger.debug(<span class="string">"Could not complete request"</span>, failureCause);</div><div class="line">				&#125;</div><div class="line">				<span class="keyword">else</span> &#123;</div><div class="line">					<span class="keyword">if</span> (asyncManager.isConcurrentHandlingStarted()) &#123;</div><div class="line">						logger.debug(<span class="string">"Leaving response open for concurrent processing"</span>);</div><div class="line">					&#125;</div><div class="line">					<span class="keyword">else</span> &#123;</div><div class="line">						<span class="keyword">this</span>.logger.debug(<span class="string">"Successfully completed request"</span>);</div><div class="line">					&#125;</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line"></div><div class="line">			publishRequestHandledEvent(request, response, startTime, failureCause);</div><div class="line">		&#125;</div><div class="line">	&#125;</div></pre></td></tr></table></figure>
+<p>为了避免子类重写它，该方法用<code>final</code>修饰。</p>
+<ul>
+<li>首先调用<code>initContextHolders</code>方法,将获取到的<code>localeContext</code>、<code>requestAttributes</code>、<code>request</code>绑定到线程上。</li>
+<li>然后调用<code>doService</code>方法，<code>doService</code>具体是由<code>DispatcherServlet</code>类实现的。</li>
+<li><code>doService</code>执行完成后，调用<code>resetContextHolders</code>，解除<code>localeContext</code>等信息与线程的绑定。</li>
+<li>最终调用<code>publishRequestHandledEvent</code>发布一个处理完成的事件。</li>
+</ul>
+<p><code>DispatcherServlet</code>类中的<code>doService</code>方法实现会调用<code>doDispatch</code>方法，这里请求分发处理的主要执行逻辑。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doDispatch</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line">		HttpServletRequest processedRequest = request;</div><div class="line">		HandlerExecutionChain mappedHandler = <span class="keyword">null</span>;</div><div class="line">		<span class="keyword">boolean</span> multipartRequestParsed = <span class="keyword">false</span>;</div><div class="line"></div><div class="line">		WebAsyncManager asyncManager = WebAsyncUtils.getAsyncManager(request);</div><div class="line"></div><div class="line">		<span class="keyword">try</span> &#123;</div><div class="line">			ModelAndView mv = <span class="keyword">null</span>;</div><div class="line">			Exception dispatchException = <span class="keyword">null</span>;</div><div class="line"></div><div class="line">			<span class="keyword">try</span> &#123;</div><div class="line">				processedRequest = checkMultipart(request);</div><div class="line">				multipartRequestParsed = (processedRequest != request);</div><div class="line"></div><div class="line">				<span class="comment">// Determine handler for the current request.</span></div><div class="line">				mappedHandler = getHandler(processedRequest);</div><div class="line">				<span class="keyword">if</span> (mappedHandler == <span class="keyword">null</span> || mappedHandler.getHandler() == <span class="keyword">null</span>) &#123;</div><div class="line">					noHandlerFound(processedRequest, response);</div><div class="line">					<span class="keyword">return</span>;</div><div class="line">				&#125;</div><div class="line"></div><div class="line">				<span class="comment">// Determine handler adapter for the current request.</span></div><div class="line">				HandlerAdapter ha = getHandlerAdapter(mappedHandler.getHandler());</div><div class="line"></div><div class="line">				<span class="comment">// Process last-modified header, if supported by the handler.</span></div><div class="line">				String method = request.getMethod();</div><div class="line">				<span class="keyword">boolean</span> isGet = <span class="string">"GET"</span>.equals(method);</div><div class="line">				<span class="keyword">if</span> (isGet || <span class="string">"HEAD"</span>.equals(method)) &#123;</div><div class="line">					<span class="keyword">long</span> lastModified = ha.getLastModified(request, mappedHandler.getHandler());</div><div class="line">					<span class="keyword">if</span> (logger.isDebugEnabled()) &#123;</div><div class="line">						logger.debug(<span class="string">"Last-Modified value for ["</span> + getRequestUri(request) + <span class="string">"] is: "</span> + lastModified);</div><div class="line">					&#125;</div><div class="line">					<span class="keyword">if</span> (<span class="keyword">new</span> ServletWebRequest(request, response).checkNotModified(lastModified) &amp;&amp; isGet) &#123;</div><div class="line">						<span class="keyword">return</span>;</div><div class="line">					&#125;</div><div class="line">				&#125;</div><div class="line"></div><div class="line">				<span class="keyword">if</span> (!mappedHandler.applyPreHandle(processedRequest, response)) &#123;</div><div class="line">					<span class="keyword">return</span>;</div><div class="line">				&#125;</div><div class="line"></div><div class="line">				<span class="comment">// Actually invoke the handler.</span></div><div class="line">				mv = ha.handle(processedRequest, response, mappedHandler.getHandler());</div><div class="line"></div><div class="line">				<span class="keyword">if</span> (asyncManager.isConcurrentHandlingStarted()) &#123;</div><div class="line">					<span class="keyword">return</span>;</div><div class="line">				&#125;</div><div class="line"></div><div class="line">				applyDefaultViewName(processedRequest, mv);</div><div class="line">				mappedHandler.applyPostHandle(processedRequest, response, mv);</div><div class="line">			&#125;</div><div class="line">			<span class="keyword">catch</span> (Exception ex) &#123;</div><div class="line">				dispatchException = ex;</div><div class="line">			&#125;</div><div class="line">			<span class="keyword">catch</span> (Throwable err) &#123;</div><div class="line">				<span class="comment">// As of 4.3, we're processing Errors thrown from handler methods as well,</span></div><div class="line">				<span class="comment">// making them available for @ExceptionHandler methods and other scenarios.</span></div><div class="line">				dispatchException = <span class="keyword">new</span> NestedServletException(<span class="string">"Handler dispatch failed"</span>, err);</div><div class="line">			&#125;</div><div class="line">			processDispatchResult(processedRequest, response, mappedHandler, mv, dispatchException);</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">catch</span> (Exception ex) &#123;</div><div class="line">			triggerAfterCompletion(processedRequest, response, mappedHandler, ex);</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">catch</span> (Throwable err) &#123;</div><div class="line">			triggerAfterCompletion(processedRequest, response, mappedHandler,</div><div class="line">					<span class="keyword">new</span> NestedServletException(<span class="string">"Handler processing failed"</span>, err));</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">finally</span> &#123;</div><div class="line">			<span class="keyword">if</span> (asyncManager.isConcurrentHandlingStarted()) &#123;</div><div class="line">				<span class="comment">// Instead of postHandle and afterCompletion</span></div><div class="line">				<span class="keyword">if</span> (mappedHandler != <span class="keyword">null</span>) &#123;</div><div class="line">					mappedHandler.applyAfterConcurrentHandlingStarted(processedRequest, response);</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line">			<span class="keyword">else</span> &#123;</div><div class="line">				<span class="comment">// Clean up any resources used by a multipart request.</span></div><div class="line">				<span class="keyword">if</span> (multipartRequestParsed) &#123;</div><div class="line">					cleanupMultipart(processedRequest);</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div></pre></td></tr></table></figure>
+<p><code>doDispatch</code>主要流程是：</p>
+<ul>
+<li>先判断是否<code>Multipart</code>类型的请求。如果是则通过<code>multipartResolver</code>解析<code>request</code></li>
+<li>通过<code>getHandler</code>方法找到从<code>HandlerMapping</code>找到该请求对应的<code>handler</code>,如果没有找到对应的<code>handler</code>则抛出异常。</li>
+<li>通过<code>getHandlerAdapter</code>方法找到<code>handler</code>对应的<code>HandlerAdapter</code></li>
+<li>如果有拦截器，执行拦截器<code>preHandler</code>方法</li>
+<li><code>HandlerAdapter</code>执行<code>handle</code>方法处理请求，返回<code>ModelAndView</code>。</li>
+<li>如果有拦截器，执行拦截器<code>postHandle</code>方法</li>
+<li>然后调用<code>processDispatchResult</code>方法处理请求结果，封装到<code>response</code>中。</li>
+</ul>
+<h3 id="SpingMVC-请求处理流程"><a href="#SpingMVC-请求处理流程" class="headerlink" title="SpingMVC 请求处理流程"></a>SpingMVC 请求处理流程</h3><p><code>SpringMVC</code>框架是围绕<code>DispatcherServlet</code>设计的。<code>DispatcherServlet</code>负责将请求分发给对应的处理程序。从网上找了两个图，可以大致了解<code>SpringMVC</code>的框架对请求的处理流程。</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79gy1fhvys33c92j30m80e9abr.jpg" alt=""></p>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcgy1fhxbhd0bxmj30nw0bagnf.jpg" alt=""></p>
+<ul>
+<li>用户发送请求，<code>Front Controller</code>（<code>DispatcherServlet</code>）根据请求信息将请求委托给对应的<code>Controller</code>进行处理。</li>
+<li><code>DispatcherServlet</code>接收到请求后，<code>HandlerMapping</code>将会把请求封装为<code>HandlerExecutionChain</code>，而<code>HandlerExecutionChain</code>包含请求的所有信息，包括拦截器、Handler处理器等。</li>
+<li><code>DispatcherServlet</code>会找到对应的<code>HandlerAdapter</code>，并调用对应的处理方法，并返回一个<code>ModelAndView</code>对象。</li>
+<li><code>DispatcherServlet</code>会将<code>ModelAndView</code>对象传入<code>View</code>层进行渲染。</li>
+<li>最终<code>DispatcherServlet</code>将渲染好的<code>response</code>返回给用户。</li>
+</ul>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>本文主要分析<code>SpringMVC</code>中<code>DispatcherServlet</code>的初始化、请求流传过程等。</p>
+<p>发现了<code>SpringMVC</code>中在<code>DispatcherServlet</code>的实现过程中运用了模板方法设计模式，看到<code>SpringMVC</code>中留给用户可扩展的点也有很多，体会到<code>Open for extension, closed for modification</code>的设计原则。</p>
+<p>本文只关注了<code>DispatcherServlet</code>主流程，忽略了很多宝贵的细枝末节，如：<code>HandlerMapping</code>、<code>HandlerExecutionChain</code>、<code>HandlerAdapter</code>等。后面有机会定会追本溯源。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/SpringMVC/" rel="tag"># SpringMVC</a>
+          
+            <a href="/tags/源码分析/" rel="tag"># 源码分析</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/12/cj64t4lyy002rq0xpumygk7fu/" rel="next" title="遍历删除list集合元素的几种写法及错误分析">
+                <i class="fa fa-chevron-left"></i> 遍历删除list集合元素的几种写法及错误分析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://i1.piimg.com/567571/989180cb5486364b.jpg"
+               alt="特立独行的猪手" />
+          <p class="site-author-name" itemprop="name">特立独行的猪手</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">34</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/lishuo9527" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/1655774835?refer_flag=1001030101_&is_hot=1" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/lishuo3" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-ravelry"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.jianshu.com/u/115cae858f68" target="_blank" title="简书">
+                  
+                    <i class="fa fa-fw fa-bookmark"></i>
+                  
+                  简书
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.7mdm.com/" title="齐码代码" target="_blank">齐码代码</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="https://halfrost.com/" title="Halfrost's Field" target="_blank">Halfrost's Field</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://qdxmq.com/" title="前端小密圈" target="_blank">前端小密圈</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#SpingMVC-初始化"><span class="nav-number">1.</span> <span class="nav-text">SpingMVC 初始化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ServletContext"><span class="nav-number">1.1.</span> <span class="nav-text">ServletContext</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#WebApplicationContext"><span class="nav-number">1.2.</span> <span class="nav-text">WebApplicationContext</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#context-param"><span class="nav-number">1.2.1.</span> <span class="nav-text">context-param</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#listener"><span class="nav-number">1.2.2.</span> <span class="nav-text">listener</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DispatcherServlet"><span class="nav-number">1.3.</span> <span class="nav-text">DispatcherServlet</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DispatcherServlet类"><span class="nav-number">2.</span> <span class="nav-text">DispatcherServlet类</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#DispatcherServlet初始化"><span class="nav-number">2.1.</span> <span class="nav-text">DispatcherServlet初始化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DispatcherServlet处理请求"><span class="nav-number">2.2.</span> <span class="nav-text">DispatcherServlet处理请求</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SpingMVC-请求处理流程"><span class="nav-number">3.</span> <span class="nav-text">SpingMVC 请求处理流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">特立独行的猪手</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+<div class="busuanzi-count">
+
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+
+  
+    <span class="site-pv">本站总访问量<span class="busuanzi-value" id="busuanzi_value_site_pv"></span>次</span>
+  
+  
+</div>
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'lishuo3';
+      var disqus_identifier = '2017/07/24/cj64t4lx80008q0xpsvdgmmer/';
+
+      var disqus_title = "SpringMVC源码分析-DispatcherServlet";
+
+
+      function run_disqus_script(disqus_script) {
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+
+      
+        var disqus_config = function () {
+            this.page.url = disqus_url;
+            this.page.identifier = disqus_identifier;
+            this.page.title = disqus_title;
+        };
+        run_disqus_script('embed.js');
+      
+
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+
+<script>
+(function(){
+    var bp = document.createElement('script');
+    bp.src = '//push.zhanzhang.baidu.com/push.js';
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+</html>
