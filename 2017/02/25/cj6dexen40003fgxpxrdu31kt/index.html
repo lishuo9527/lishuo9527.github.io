@@ -1,0 +1,946 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="JVM," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="http://i1.piimg.com/567571/989180cb5486364b.jpg?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="JVM内存区域了解Java GC之前，必须先搞清楚JVM中内存区域的划分。JVM中内存区域大致可分为如上图所示几大区域。其中：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JVM系列-JVM内存区域与GC机制">
+<meta property="og:url" content="http://lishuo.me/2017/02/25/cj6dexen40003fgxpxrdu31kt/index.html">
+<meta property="og:site_name" content="Lis`s  Blog">
+<meta property="og:description" content="JVM内存区域了解Java GC之前，必须先搞清楚JVM中内存区域的划分。JVM中内存区域大致可分为如上图所示几大区域。其中：">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1239929-57cecd7aa84dbb81.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/500">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcgy1fgrqh0gdryj30eh03maad.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1fgrqsij1nmj30el03omxi.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcgy1fgrqt0mhkej30el03ojrr.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcgy1fgrqtxewvwj30ea037q3e.jpg">
+<meta property="og:updated_time" content="2017-06-20T09:32:32.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JVM系列-JVM内存区域与GC机制">
+<meta name="twitter:description" content="JVM内存区域了解Java GC之前，必须先搞清楚JVM中内存区域的划分。JVM中内存区域大致可分为如上图所示几大区域。其中：">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/1239929-57cecd7aa84dbb81.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/500">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://lishuo.me/2017/02/25/cj6dexen40003fgxpxrdu31kt/"/>
+
+
+
+
+
+  <title> JVM系列-JVM内存区域与GC机制 | Lis`s  Blog </title>
+  <meta name="baidu-site-verification" content="xd9p2Pbnya" />
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?04c3d6bbc9cc999595dba945a9475b5a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Lis`s  Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">一盘炒猪肝 二两黄酒 黄酒温一温</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://lishuo.me/2017/02/25/cj6dexen40003fgxpxrdu31kt/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="特立独行的猪手">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://i1.piimg.com/567571/989180cb5486364b.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lis`s  Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+            
+            
+              
+                JVM系列-JVM内存区域与GC机制
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-25T00:23:00+08:00">
+                2017-02-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/02/25/cj6dexen40003fgxpxrdu31kt/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/02/25/cj6dexen40003fgxpxrdu31kt/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-eye"></i>本文总阅读量
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="JVM内存区域"><a href="#JVM内存区域" class="headerlink" title="JVM内存区域"></a>JVM内存区域</h3><p>了解Java GC之前，必须先搞清楚JVM中内存区域的划分。<br><img src="http://upload-images.jianshu.io/upload_images/1239929-57cecd7aa84dbb81.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/500" alt="JVM内存区域图"><br>JVM中内存区域大致可分为如上图所示几大区域。其中：</p>
+<a id="more"></a> 
+<h4 id="堆区"><a href="#堆区" class="headerlink" title="堆区"></a>堆区</h4><p>JVM只有一个堆，堆区是JVM内存管理中最大的一块，也是GC主要工作区域，是线程共享的。堆区的主要作用是存储对象实例，一般来说，所有的对象都在堆上分配内存。</p>
+<h4 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h4><p>JVM方法区又称静态区，存放所有的class和静态变量、final常量。在HotSpot虚拟机中也被称为持久代，线程共享。</p>
+<p>在JDK8 HotSpot JVM将会出现持久代的替代者：元空间（Metaspace），这样一来我们就再也看不到<code>java.lang.OutOfMemoryError: PermGen Space</code>的异常了。</p>
+<h4 id="虚拟机栈"><a href="#虚拟机栈" class="headerlink" title="虚拟机栈"></a>虚拟机栈</h4><p>线程的每个方法在执行的同时都会创建一个栈桢，栈桢中存储的有局部变量表，操作数栈，方法出口等，当方法被调用时，栈桢在JVM栈中入栈，当方法执行结束的时候，栈桢出栈。<br>局部变量表中存储着方法的相关局部变量，包括各种基本数据类型，对象的引用，返回的地址等，在局部变量表中在编译是就已经确定好的，方法在运行时所需要分配的空间在栈桢中完全确定的，在方法生命周期内都不会改变。<br>虚拟机栈中会出现2种异常：StatckOverFlowError 和 OutOfMemoryError；当线程调用的栈深度大于虚拟机允许的最大深度，则抛出StatckOverFlowError，如无限递归，就容易出现这个问题。线程不断的申请内存空间，直至内存不足，会抛出OutOfMemoryError异常，如无限循环申请内存空间就会导致OOM异常。</p>
+<h4 id="本地方法栈"><a href="#本地方法栈" class="headerlink" title="本地方法栈"></a>本地方法栈</h4><p>本地方法栈的作用和虚拟机栈很多方面都相同，唯一的区别是：虚拟机栈是执行Java方法的，而本地方法栈是执行native方法的。线程私有。<br>Java对一些底层操作系统或者某些硬件交换信息时，如何用Java来实现在效率上非常低，对于这类方法通常是使用其他语言实现，如C或者C++，我们可以使用System.loadLibrary()来调用Dll。</p>
+<h4 id="程序计数器"><a href="#程序计数器" class="headerlink" title="程序计数器"></a>程序计数器</h4><p>程序计数器记录着正在执行的虚拟机字节码指令地址，如果执行的本地方法，则程序计数器为Undefined，因为只保存当前指令的地址，所以不会存在内存溢出的问题，也是唯一一个没有定义OOM的区域。</p>
+<h3 id="JAVA-GC-算法"><a href="#JAVA-GC-算法" class="headerlink" title="JAVA GC 算法"></a>JAVA GC 算法</h3><p>　Java GC（垃圾回收)机制是一种和垃圾回收的自动内存管理机制。GC机制对JVM中的内存进行标记，并确定哪些内存需要回收，根据一定的回收策略，自动的回收内存，保证JVM中的内存空间，防止出现内存泄露和溢出问题。</p>
+<h4 id="GC的评价标准"><a href="#GC的评价标准" class="headerlink" title="GC的评价标准"></a>GC的评价标准</h4><ul>
+<li>吞吐量</li>
+<li>最大暂停时间（stop the world）</li>
+<li>堆使用效率</li>
+<li>访问的局部性</li>
+</ul>
+<h4 id="GC算法"><a href="#GC算法" class="headerlink" title="GC算法"></a>GC算法</h4><p>在JAVA中GC算法主要分为3种，GC标记-清除算法、引用计数算法、GC复制算法，其他的GC算法多数都是以上GC算法的组合和应用。</p>
+<p><strong><em>GC标记-清除算法</em></strong></p>
+<p>标记阶段：递归标记堆中指针数组能够访问的对象，将每个活动对象打上mark。<br>清除阶段：遍历堆将没有标记的对象，将其回收(将其连接到空闲链表上)。<br>再分配阶段：遍历空闲链表，寻找大于或等于待分配的size的分块。大小相等直接返回，大于则分割，剩余返回空闲链表<br>合并阶段：将连续空闲分块合并。</p>
+<blockquote>
+<p>优点：实现简单，对象不移动，可与保守式GC算法兼容；缺点：碎片化过于严重，分配的时候需要遍历空闲链表，效率低下，与写时复制不兼容。</p>
+</blockquote>
+<p>算法改进：</p>
+<ul>
+<li>引入多个空闲链表，每个链表拥有固定分块，一般来说设定2、3、4、5..100字，以及大于等于101字，拱100个空闲链表，如果出现需要分配大于100字的size，将再第100个链表中查找匹配返回。分配时不再需要遍历链表，缓解分配效率低下的问题。</li>
+<li>BIBOP法：将大小相近的对象整理成固定大小的块进行管理。将堆分割成固定大小的块，让每个块只能配置同样大小的对象。优点减少碎片化，缺点堆使用效率不够高。</li>
+<li>位图标记，引入二进制位图表格进行标记对象，解决写时复制的不兼容的问题。清除阶段不再需要遍历堆。</li>
+</ul>
+<p><strong><em>引用计数法</em></strong><br>引入计数器，用增减计数器的值来进行内存管理。在分配内存空间时，将对象的计数器+1. 在更新指针的过程中，增加新应用对象的ref_cnt，减少指针原先对象的ref_cnt计数。如果ref_cnt为0，则为垃圾，将被立即回收。</p>
+<blockquote>
+<p>优点：引用计数，可以及时回收垃圾，最大暂停时间短，减少指针查找的次数。缺点：增减操作频繁开销大；计数器保证位宽，需要占用空间，堆的使用效率低；循环引用无法回收。</p>
+</blockquote>
+<p>算法改进：</p>
+<ul>
+<li><p>延迟引用计数法，使用ZCT(zero count Table)记录计数为0的对象，然后进行统一回收。通过延迟引用计数法，延迟了根引用的计数，减轻了根引用发生变化带来计数器频繁增减的开销，但丧失了垃圾可以立即回收的优点。</p>
+</li>
+<li><p>sticky引用计数法，减少计数器的位宽，会引入新的问题，计数器溢出爆表。对于计数器爆表可以选择啥都不做，也可以使用标记-清除算法清除垃圾，这样可以回收循环引用，但是吞吐量会减少。</p>
+</li>
+<li>1位引用计数法，计数器只有1位，0表示被引用数为1，1表示被引用数大于等于2。通过指针复制的方式更新指针。优点:不需要再更新计数器的时候去读取对象，效率高；无需为计数器留足空间，节省内存消耗。缺点是还会存在计数器爆表。</li>
+<li>部分标记-清除算法，将对象涂成4中颜色来管理内存，黑（绝对不是垃圾），灰（搜索完毕的对象），白（绝对是垃圾），阴影（可能是循环垃圾）。mutator删除根到对象的引用，会将对象的计数减1，并将其涂成阴影并将指针追加至阴影队列中。在new_obj的过程中，如果发生无法分配区块，将调用scan_hatch_queue() 找出被涂成阴影的对象，依次执行paint_gray、scan_gray、collect_white。缺点：需要多次查找对象，效率低下。优点:解决了循环对象不可回收的问题。<ul>
+<li>paint_gray：将对象涂成灰色，对子对象进行减量操作。</li>
+<li>scan_gray: 对于ref_cnt大于0的对象涂黑，等于0 的对象及其子对象涂白。</li>
+<li>collect_white: 回收白色对象.</li>
+</ul>
+</li>
+</ul>
+<p><strong><em>GC复制算法</em></strong><br>将堆空间等分成大小相同的两份，执行GC时候，将from空间的活动对象复制至to空间，复制完成后，回收from空间。复制的时候先将原有对象打上copy标签，指向新空间的对象存放在obj.forwarding中。</p>
+<blockquote>
+<p>优点：吞吐量高，可实现高速分配，不会发生碎片化，与缓存兼容。<br>缺点：堆使用效率低下；对象移动了，不兼容保守式GC算法，递归调用复制子对象，每次复制都要调用函数。</p>
+</blockquote>
+<p>算法改进：</p>
+<ul>
+<li>Cheney的GC复制算法，采用迭代进行复制的算法，广度优先搜索。优点：抑制递归调用函数额外的开销和栈的消耗；缺点：无法兼容缓存。</li>
+<li>近似深度优先的搜索算法，原理是将有引用关系的对象集中在一页中，再每个页中执行广度优先搜索。优点：可以兼容缓存。</li>
+<li>多空间复制，2个空间执行GC复制，其他空间执行GC标记-清除算法。优点：堆空间使用效率得到提高；缺点:引入GC标记-清除算法，带来的问题：分配耗时，碎片化。</li>
+</ul>
+<p><strong><em>分代GC算法</em></strong><br>原理：分代GC中将对象分成几代。针对不同的代是用不同的GC算法。刚生成的对象叫新生代对象，经过一定次数GC的对象成为老年代GC。新生代分为eden区，from区，to区，多采用复制算法。老生代多采用标记清除、标记压缩/整理算法。</p>
+<blockquote>
+<p>优点：吞吐量得到优化。</p>
+</blockquote>
+<p><strong><em>增量式GC算法</em></strong></p>
+<p>增量GC名称的由来跟全量GC相对，就是每次只处理一小部分的对象。把GC堆切分为很多小块（叫做chunk或者region），然后每次GC增量式对一部分小块做回收（而不必对整个GC堆做回收），这样就把一次大收集拆分成了多次小的增量式收集，减小了每次收集的工作量——也就减小了GC暂停时间。hotspot JVM 用 train GC作为增量式GC的实现，但后面被废弃了。目前G1垃圾收集器，采用的是增量式GC的算法。</p>
+<h3 id="HotSpot-JVM-GC-机制"><a href="#HotSpot-JVM-GC-机制" class="headerlink" title="HotSpot JVM GC 机制"></a>HotSpot JVM GC 机制</h3><p>HotSpot JVM 大致可分为：年轻代（Young Generation）、年老代（Old Generation）、永久代（Permanent Generation，也就是方法区，JDK1.8将被元空间（Metaspace）替代）。我们创建的对象在其生命周期基本上活动在这几块区域中。</p>
+<h4 id="年轻代（Young-Generation）"><a href="#年轻代（Young-Generation）" class="headerlink" title="年轻代（Young Generation）"></a>年轻代（Young Generation）</h4><p>年轻代又可以细分为：Eden区、Survivor 区（From区、To区）默认比例：Eden：from：To = 8:1:1。当我们创建一个对象时，JVM首先将对象分配在eden区，其中大部分对象在该区域死亡，成为垃圾对象。当Eden区内存空间不足，年轻代将执行Young GC回收垃圾对象，在此阶段，年轻代利用Survivor 区GC复制算法来收集垃圾。经过几次Young GC 仍然存活的对象，将根据相关策略晋升至年老代。</p>
+<h4 id="年老代（Old-Generation）"><a href="#年老代（Old-Generation）" class="headerlink" title="年老代（Old Generation）"></a>年老代（Old Generation）</h4><p>对象如果在年轻代存活了足够长的时间而没有被清理掉（即在几次Young GC后存活了下来），则会被复制到年老代，年老代的空间一般比年轻代大，能存放更多的对象，在年老代上发生的GC次数也比年轻代少。当年老代内存不足时，将执行 Full GC。如果对象比较大（比如长字符串或大数组），Young空间不足，则大对象会直接分配到老年代上（大对象可能触发提前GC，应少用，更应避免使用短命的大对象）。　</p>
+<p>显然HotSpot JVM 的GC机制的基本算法是：分代收集算法。在年轻代中的Young GC使用的GC复制算法；在年老代中，将使用标记-清除算法、标记-压缩算法；对于方法区（永生代）中，常量池中的常量，无用的类信息，没有引用了就可以被回收，但回收不是必须的。</p>
+<h3 id="垃圾收集器"><a href="#垃圾收集器" class="headerlink" title="垃圾收集器"></a>垃圾收集器</h3><p>在年轻代执行GC的时候，所有的线程都将会暂停工作（stop the world）,尽管各种GC收集器都在不断优化减少暂停时间，但目前为止GC的暂停时间还是存在的。</p>
+<h4 id="Serial收集器"><a href="#Serial收集器" class="headerlink" title="Serial收集器"></a>Serial收集器</h4><p>新生代收集器。使用复制算法，使用一个线程进行GC，其它工作线程暂停。使用-XX:+UseSerialGC可以使用Serial+Serial Old模式运行进行内存回收（这也是虚拟机在Client模式下运行的默认值）。GC触发机制：之前Young GC晋级到年老代的平均大小 &lt; 年老代的剩余空间 &lt; eden+from Survivor的使用空间。当HandlePromotionFailure为true，则仅触发Young gc；如为false，则触发Full GC。</p>
+<h4 id="Serial-Old收集器"><a href="#Serial-Old收集器" class="headerlink" title="Serial Old收集器"></a>Serial Old收集器</h4><p>老年代收集器，使用标记整理（整理的方法是Sweep（清理）和Compact（压缩），清理是将废弃的对象干掉，只留幸存的对象，压缩是将移动对象，将空间填满保证内存分为2块，一块全是对象，一块空闲）算法，使用单线程进行GC，其它工作线程暂停（注意，在老年代中进行标记整理算法清理，也需要暂停其它线程），在JDK1.5之前，Serial Old收集器与ParallelScavenge搭配使用。触发机制：old gen空间不足；perm gen空间不足；Young GC时的悲观策略；Young GC后在eden上分配内存仍然失败；</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcgy1fgrqh0gdryj30eh03maad.jpg" alt=""></p>
+<h4 id="ParNew收集器"><a href="#ParNew收集器" class="headerlink" title="ParNew收集器"></a>ParNew收集器</h4><p>新生代收集器，使用复制算法，Serial收集器的多线程版，用多个线程进行GC，其它工作线程暂停，关注缩短垃圾收集时间。使用-XX:+UseParNewGC开关来控制使用ParNew+Serial Old收集器组合收集内存；使用-XX:ParallelGCThreads来设置执行内存回收的线程数。在Server模式下是JVM首选的新生代收集器。可以和老年代CMS配合使用。<br><img src="https://ws2.sinaimg.cn/large/006tKfTcgy1fgrqsij1nmj30el03omxi.jpg" alt=""></p>
+<h4 id="Parallel-Scavenge-收集器"><a href="#Parallel-Scavenge-收集器" class="headerlink" title="Parallel Scavenge 收集器"></a>Parallel Scavenge 收集器</h4><p>PS收集器是新生代收集器，吞吐量有限的收集器。</p>
+<p>使用-XX:+UseParallelGC开关控制使用Parallel Scavenge+Serial Old收集器组合回收垃圾（这也是在Server模式下的默认值）；使用-XX:GCTimeRatio来设置用户执行时间占总时间的比例，默认99，即1%的时间用来进行垃圾回收。使用-XX:MaxGCPauseMillis设置GC的最大停顿时间（这个参数只对Parallel Scavenge有效），可以利用这2个参数精确控制吞吐量。用开关参数-XX:+UseAdaptiveSizePolicy可以进行动态控制，如自动调整Eden/Survivor比例，老年代对象年龄，新生代大小等。</p>
+<p>GC触发机制：在回收前PS GC会先检测之前每次PS GC时，晋升到老生代的平均大小是否大于老生代的剩余空间，如大于则直接触发full GC；</p>
+<h4 id="Parallel-Old-收集器"><a href="#Parallel-Old-收集器" class="headerlink" title="Parallel Old 收集器"></a>Parallel Old 收集器</h4><p>老年代收集器，Parallel Scavenge收集器的多线程版本，多线程机制与Parallel Scavenge差不多，使用标记整理（与Serial Old不同，这里的整理是Summary（汇总）和Compact（压缩），汇总的意思就是将幸存的对象复制到预先准备好的区域，而不是像Sweep（清理）那样清理废弃的对象）算法，在Parallel Old执行时，仍然需要暂停其它线程。Parallel Old在多核计算中很有用。Parallel Old出现后（JDK 1.6），与Parallel Scavenge配合有很好的效果，充分体现Parallel Scavenge收集器吞吐量优先的效果。使用-XX:+UseParallelOldGC开关控制使用Parallel Scavenge +Parallel Old组合收集器进行收集。</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tKfTcgy1fgrqt0mhkej30el03ojrr.jpg" alt=""></p>
+<h4 id="CMS（Concurrent-Mark-Sweep）-收集器"><a href="#CMS（Concurrent-Mark-Sweep）-收集器" class="headerlink" title="CMS（Concurrent Mark Sweep） 收集器"></a>CMS（Concurrent Mark Sweep） 收集器</h4><p>老年代收集器，并发收集器，致力于获取最短回收停顿时间（即缩短垃圾回收的时间），使用标记清除算法，多线程，优点是并发收集（用户线程可以和GC线程同时工作），停顿小。使用-XX:+UseConcMarkSweepGC进行ParNew+CMS+Serial Old进行内存回收，优先使用ParNew+CMS，当用户线程内存不足时，采用备用方案Serial Old收集。触发机制： 当老生代空间的使用到达一定比率时触发；当perm gen采用CMS收集且空间使用到一定比率时触发；Hotspot根据成本计算决定是否需要执行CMS GC；可通过-XX:+UseCMSInitiatingOccupancyOnly来去掉这个动态执行的策略。</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcgy1fgrqtxewvwj30ea037q3e.jpg" alt=""></p>
+<h4 id="Yong-GC-悲观策略"><a href="#Yong-GC-悲观策略" class="headerlink" title="Yong GC 悲观策略"></a>Yong GC 悲观策略</h4><blockquote>
+<p>Yong GC 悲观策略：<br>1、在YGC执行前，min(目前新生代已使用的大小,之前平均晋升到old的大小中的较小值) &gt; 旧生代剩余空间大小 ? 不执行YGC，直接执行Full GC : 执行YGC；<br>2、在YGC执行后，平均晋升到old的大小 &gt; 旧生代剩余空间大小 ? 触发Full GC ： 什么都不做。</p>
+</blockquote>
+<h4 id="Safepoint-和-Safe-Region"><a href="#Safepoint-和-Safe-Region" class="headerlink" title="Safepoint 和 Safe Region"></a>Safepoint 和 Safe Region</h4><p>Safepoint是指一些特定的位置，当线程运行要这些位置时候，线程的一些状态可以被确定，使得JVM可以安全的进行GC。</p>
+<p>Safepoint的选定即不能太少以至于让GC等待时机太长，也不能过于频繁以至于过分增大运行的负荷。所以，安全点的选定基本上要以程序“是否具有让程序长时间执行的特征”为标准进行选定的。长时间执行最明显的特征就是指令序列复用，如方法调用、循环跳转、异常跳转等，具有这些功能的指令爱可以产生Safepoint。</p>
+<p>GC发生的时候需要让所有线程都跑到Safepoint再停顿下来，目前的虚拟机大多采用主动中断的方式：当GC需要中断线程的时候，不直接对线程操作，仅仅是设置一个标志，各个线程执行的时候主动去轮询这个标志，发现中断标志为true时就中断挂起自己。轮询标志和安全点是重合的，另外在加上创建对象需要分配内存的地方。</p>
+<p>线程有的时候会出于sleep状态，这些线程无法响应JVM中断，这种情况需要安全区来解决。安全区域Safe Region是指在一段代码片段之中，引用关系不会发生变化，这个区域的任意一个地方开始GC都是安全的。当线程执行到Safe Region中的代码时，首先表示自己已经进入Safe Region。那样在这段时间里JVM要发起GC时候，就不用管标识自己为Safe Region状态的线程了。当线程要离开Safe Region时，要检查系统是否完成了GC，如果完成了，线程继续执行，否则则等待GC完成才可以离开Safe Region。</p>
+<p>可以设置JVM参数 -XX:+PrintSafepointStatistics –XX:PrintSafepointStatisticsCount=1 来输出safepoint的统计信息</p>
+<h3 id="GC监控"><a href="#GC监控" class="headerlink" title="GC监控"></a>GC监控</h3><p>命令行工具：jmap，jstat，jstack。<br>GUI工具：jconsole，jvisualvm</p>
+<p><strong><em> 如果有纰漏，请留言指正。</em></strong></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JVM/" rel="tag"># JVM</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/12/07/cj6dexenr000ffgxp6b5hw5na/" rel="next" title="MongoDB 2dsphere Indexes">
+                <i class="fa fa-chevron-left"></i> MongoDB 2dsphere Indexes
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/02/28/cj6dexenb0006fgxp65738l46/" rel="prev" title="JVM系列-类加载机制原理与过程">
+                JVM系列-类加载机制原理与过程 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://i1.piimg.com/567571/989180cb5486364b.jpg"
+               alt="特立独行的猪手" />
+          <p class="site-author-name" itemprop="name">特立独行的猪手</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/lishuo9527" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/1655774835?refer_flag=1001030101_&is_hot=1" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/lishuo3" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-ravelry"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.jianshu.com/u/115cae858f68" target="_blank" title="简书">
+                  
+                    <i class="fa fa-fw fa-bookmark"></i>
+                  
+                  简书
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.7mdm.com/" title="齐码代码" target="_blank">齐码代码</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="https://halfrost.com/" title="Halfrost's Field" target="_blank">Halfrost's Field</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://qdxmq.com/" title="前端小密圈" target="_blank">前端小密圈</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#JVM内存区域"><span class="nav-number">1.</span> <span class="nav-text">JVM内存区域</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#堆区"><span class="nav-number">1.1.</span> <span class="nav-text">堆区</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#方法区"><span class="nav-number">1.2.</span> <span class="nav-text">方法区</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#虚拟机栈"><span class="nav-number">1.3.</span> <span class="nav-text">虚拟机栈</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#本地方法栈"><span class="nav-number">1.4.</span> <span class="nav-text">本地方法栈</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#程序计数器"><span class="nav-number">1.5.</span> <span class="nav-text">程序计数器</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JAVA-GC-算法"><span class="nav-number">2.</span> <span class="nav-text">JAVA GC 算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#GC的评价标准"><span class="nav-number">2.1.</span> <span class="nav-text">GC的评价标准</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#GC算法"><span class="nav-number">2.2.</span> <span class="nav-text">GC算法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HotSpot-JVM-GC-机制"><span class="nav-number">3.</span> <span class="nav-text">HotSpot JVM GC 机制</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#年轻代（Young-Generation）"><span class="nav-number">3.1.</span> <span class="nav-text">年轻代（Young Generation）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#年老代（Old-Generation）"><span class="nav-number">3.2.</span> <span class="nav-text">年老代（Old Generation）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#垃圾收集器"><span class="nav-number">4.</span> <span class="nav-text">垃圾收集器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Serial收集器"><span class="nav-number">4.1.</span> <span class="nav-text">Serial收集器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Serial-Old收集器"><span class="nav-number">4.2.</span> <span class="nav-text">Serial Old收集器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ParNew收集器"><span class="nav-number">4.3.</span> <span class="nav-text">ParNew收集器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Parallel-Scavenge-收集器"><span class="nav-number">4.4.</span> <span class="nav-text">Parallel Scavenge 收集器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Parallel-Old-收集器"><span class="nav-number">4.5.</span> <span class="nav-text">Parallel Old 收集器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CMS（Concurrent-Mark-Sweep）-收集器"><span class="nav-number">4.6.</span> <span class="nav-text">CMS（Concurrent Mark Sweep） 收集器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Yong-GC-悲观策略"><span class="nav-number">4.7.</span> <span class="nav-text">Yong GC 悲观策略</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Safepoint-和-Safe-Region"><span class="nav-number">4.8.</span> <span class="nav-text">Safepoint 和 Safe Region</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GC监控"><span class="nav-number">5.</span> <span class="nav-text">GC监控</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">特立独行的猪手</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+<div class="busuanzi-count">
+
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+
+  
+    <span class="site-pv">本站总访问量<span class="busuanzi-value" id="busuanzi_value_site_pv"></span>次</span>
+  
+  
+</div>
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'lishuo3';
+      var disqus_identifier = '2017/02/25/cj6dexen40003fgxpxrdu31kt/';
+
+      var disqus_title = "JVM系列-JVM内存区域与GC机制";
+
+
+      function run_disqus_script(disqus_script) {
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+
+      
+        var disqus_config = function () {
+            this.page.url = disqus_url;
+            this.page.identifier = disqus_identifier;
+            this.page.title = disqus_title;
+        };
+        run_disqus_script('embed.js');
+      
+
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+
+<script>
+(function(){
+    var bp = document.createElement('script');
+    bp.src = '//push.zhanzhang.baidu.com/push.js';
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+</html>

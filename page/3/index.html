@@ -280,7 +280,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://lishuo.me/2017/03/18/cj665gj2900256qxpgd2zlhm3/">
+    <link itemprop="mainEntityOfPage" href="http://lishuo.me/2017/03/19/cj6dexeok0016fgxp96almmea/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="特立独行的猪手">
@@ -302,7 +302,162 @@
             
               
                 
-                <a class="post-title-link" href="/2017/03/18/cj665gj2900256qxpgd2zlhm3/" itemprop="url">
+                <a class="post-title-link" href="/2017/03/19/cj6dexeok0016fgxp96almmea/" itemprop="url">
+                  源码分析之AtomicInteger
+                </a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-19T22:45:52+08:00">
+                2017-03-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/源码分析/" itemprop="url" rel="index">
+                    <span itemprop="name">源码分析</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/03/19/cj6dexeok0016fgxp96almmea/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/03/19/cj6dexeok0016fgxp96almmea/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p><code>AtomicInteger</code>是<code>java.util.concurrent.atomic</code>包下的类，作用是提供原子操作<code>Integer</code>类。</p>
+<p>我们知道在<code>Java</code>中，<code>i++、++i</code>这种操作并不是线程安全的。主要是因为类似于<code>++</code>操作会被编译为2条操作指令，而多线程环境下CPU在执行过程可能会中断切换到别的线程，无法保证2条操作指令的原子性，所以是线程不安全。针对这种情况，我们可能会想到利用<code>synchronize</code>关键字实现线程同步，保证<code>++</code>操作的原子性，的确这是一种有效的方法，但我们还有一种选择–<code>AtomicInteger</code>。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/03/19/cj6dexeok0016fgxp96almmea/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://lishuo.me/2017/03/18/cj6dexepi002kfgxp2fdqg1dm/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="特立独行的猪手">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://i1.piimg.com/567571/989180cb5486364b.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lis`s  Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/03/18/cj6dexepi002kfgxp2fdqg1dm/" itemprop="url">
                   设计模式系列-模板方法模式
                 </a>
               
@@ -360,8 +515,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/03/18/cj665gj2900256qxpgd2zlhm3/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/03/18/cj665gj2900256qxpgd2zlhm3/" itemprop="commentCount"></span>
+                <a href="/2017/03/18/cj6dexepi002kfgxp2fdqg1dm/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/03/18/cj6dexepi002kfgxp2fdqg1dm/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -396,7 +551,7 @@
 <h1 id="模板方法模式"><a href="#模板方法模式" class="headerlink" title="模板方法模式"></a>模板方法模式</h1><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>模板方法模式在一个方法中定义了算法的骨架，把其中的某些步骤延迟到子类的实现，是为我们提供了代码复用的一种重要的技巧。模板方法使得子类可以在不改变算法结构的情况下，重新定义算法中的某些步骤。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/03/18/cj665gj2900256qxpgd2zlhm3/#more" rel="contents">
+            <a class="btn" href="/2017/03/18/cj6dexepi002kfgxp2fdqg1dm/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -439,7 +594,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://lishuo.me/2017/03/17/cj665gj1w001o6qxp3t5hy3w8/">
+    <link itemprop="mainEntityOfPage" href="http://lishuo.me/2017/03/17/cj6dexep80025fgxpmd6a3m6c/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="特立独行的猪手">
@@ -461,7 +616,7 @@
             
               
                 
-                <a class="post-title-link" href="/2017/03/17/cj665gj1w001o6qxp3t5hy3w8/" itemprop="url">
+                <a class="post-title-link" href="/2017/03/17/cj6dexep80025fgxpmd6a3m6c/" itemprop="url">
                   源码分析之ThreadLocal
                 </a>
               
@@ -519,8 +674,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/03/17/cj665gj1w001o6qxp3t5hy3w8/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/03/17/cj665gj1w001o6qxp3t5hy3w8/" itemprop="commentCount"></span>
+                <a href="/2017/03/17/cj6dexep80025fgxpmd6a3m6c/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/03/17/cj6dexep80025fgxpmd6a3m6c/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -551,7 +706,7 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</div><div class="line"> * This class provides thread-local variables.  These variables differ from</div><div class="line"> * their normal counterparts in that each thread that accesses one (via its</div><div class="line"> * &#123;<span class="doctag">@code</span> get&#125; or &#123;<span class="doctag">@code</span> set&#125; method) has its own, independently initialized</div><div class="line"> * copy of the variable.  &#123;<span class="doctag">@code</span> ThreadLocal&#125; instances are typically private</div><div class="line"> * static fields in classes that wish to associate state with a thread (e.g.,</div><div class="line"> * a user ID or Transaction ID).</div><div class="line">*/</span></div></pre></td></tr></table></figure>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/03/17/cj665gj1w001o6qxp3t5hy3w8/#more" rel="contents">
+            <a class="btn" href="/2017/03/17/cj6dexep80025fgxpmd6a3m6c/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -594,7 +749,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://lishuo.me/2017/03/12/cj665gj2o002o6qxpbl1kv625/">
+    <link itemprop="mainEntityOfPage" href="http://lishuo.me/2017/03/12/cj6dexepm002vfgxpe360rq4v/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="特立独行的猪手">
@@ -616,7 +771,7 @@
             
               
                 
-                <a class="post-title-link" href="/2017/03/12/cj665gj2o002o6qxpbl1kv625/" itemprop="url">
+                <a class="post-title-link" href="/2017/03/12/cj6dexepm002vfgxpe360rq4v/" itemprop="url">
                   设计模式系列-观察者模式
                 </a>
               
@@ -674,8 +829,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/03/12/cj665gj2o002o6qxpbl1kv625/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/03/12/cj665gj2o002o6qxpbl1kv625/" itemprop="commentCount"></span>
+                <a href="/2017/03/12/cj6dexepm002vfgxpe360rq4v/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/03/12/cj6dexepm002vfgxpe360rq4v/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -710,7 +865,7 @@
 <h1 id="观察者模式"><a href="#观察者模式" class="headerlink" title="观察者模式"></a>观察者模式</h1><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>也称作发布/订阅模式。观察者模式定义了一种一对多的依赖关系，让多个观察者对象同时监听某一个主题对象。这个主题对象在状态发生变化时，会通知所有观察者对象，使它们能够自动更新自己。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/03/12/cj665gj2o002o6qxpbl1kv625/#more" rel="contents">
+            <a class="btn" href="/2017/03/12/cj6dexepm002vfgxpe360rq4v/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -753,7 +908,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://lishuo.me/2017/03/10/cj665gj2600216qxp6ypaened/">
+    <link itemprop="mainEntityOfPage" href="http://lishuo.me/2017/03/10/cj6dexepa0028fgxpshbj948n/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="特立独行的猪手">
@@ -775,7 +930,7 @@
             
               
                 
-                <a class="post-title-link" href="/2017/03/10/cj665gj2600216qxp6ypaened/" itemprop="url">
+                <a class="post-title-link" href="/2017/03/10/cj6dexepa0028fgxpshbj948n/" itemprop="url">
                   设计模式系列-单例模式
                 </a>
               
@@ -833,8 +988,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/03/10/cj665gj2600216qxp6ypaened/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/03/10/cj665gj2600216qxp6ypaened/" itemprop="commentCount"></span>
+                <a href="/2017/03/10/cj6dexepa0028fgxpshbj948n/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/03/10/cj6dexepa0028fgxpshbj948n/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -870,7 +1025,7 @@
 <p>代码地址：<a href="https://github.com/lishuo9527/JavaDesignPatterns/tree/master/Singleton">GitHub</a></p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/03/10/cj665gj2600216qxp6ypaened/#more" rel="contents">
+            <a class="btn" href="/2017/03/10/cj6dexepa0028fgxpshbj948n/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -913,7 +1068,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://lishuo.me/2017/03/07/cj665gj0m000i6qxp2ko24muy/">
+    <link itemprop="mainEntityOfPage" href="http://lishuo.me/2017/03/07/cj6dexeo6000qfgxpyptqcyld/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="特立独行的猪手">
@@ -935,7 +1090,7 @@
             
               
                 
-                <a class="post-title-link" href="/2017/03/07/cj665gj0m000i6qxp2ko24muy/" itemprop="url">
+                <a class="post-title-link" href="/2017/03/07/cj6dexeo6000qfgxpyptqcyld/" itemprop="url">
                   博客框架升级（Hexo + NexT）
                 </a>
               
@@ -971,8 +1126,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/03/07/cj665gj0m000i6qxp2ko24muy/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/03/07/cj665gj0m000i6qxp2ko24muy/" itemprop="commentCount"></span>
+                <a href="/2017/03/07/cj6dexeo6000qfgxpyptqcyld/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/03/07/cj6dexeo6000qfgxpyptqcyld/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1008,7 +1163,7 @@
 <li><a href="https://git-scm.com/">Git</a>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/03/07/cj665gj0m000i6qxp2ko24muy/#more" rel="contents">
+            <a class="btn" href="/2017/03/07/cj6dexeo6000qfgxpyptqcyld/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1051,7 +1206,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://lishuo.me/2017/02/28/cj665gj0200046qxpqoac7m0e/">
+    <link itemprop="mainEntityOfPage" href="http://lishuo.me/2017/02/28/cj6dexenb0006fgxp65738l46/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="特立独行的猪手">
@@ -1073,7 +1228,7 @@
             
               
                 
-                <a class="post-title-link" href="/2017/02/28/cj665gj0200046qxpqoac7m0e/" itemprop="url">
+                <a class="post-title-link" href="/2017/02/28/cj6dexenb0006fgxp65738l46/" itemprop="url">
                   JVM系列-类加载机制原理与过程
                 </a>
               
@@ -1131,8 +1286,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/02/28/cj665gj0200046qxpqoac7m0e/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/02/28/cj665gj0200046qxpqoac7m0e/" itemprop="commentCount"></span>
+                <a href="/2017/02/28/cj6dexenb0006fgxp65738l46/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/02/28/cj6dexenb0006fgxp65738l46/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1163,7 +1318,7 @@
 <p>类从被加载到JVM中开始，到卸载出内存为止，整个生命周期包括：加载、验证、准备、解析、初始化、使用和卸载7个阶段。发生顺序如下图所示。<br>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/02/28/cj665gj0200046qxpqoac7m0e/#more" rel="contents">
+            <a class="btn" href="/2017/02/28/cj6dexenb0006fgxp65738l46/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1206,7 +1361,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://lishuo.me/2017/02/25/cj665gj0600066qxp00w1w5mn/">
+    <link itemprop="mainEntityOfPage" href="http://lishuo.me/2017/02/25/cj6dexen40003fgxpxrdu31kt/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="特立独行的猪手">
@@ -1228,7 +1383,7 @@
             
               
                 
-                <a class="post-title-link" href="/2017/02/25/cj665gj0600066qxp00w1w5mn/" itemprop="url">
+                <a class="post-title-link" href="/2017/02/25/cj6dexen40003fgxpxrdu31kt/" itemprop="url">
                   JVM系列-JVM内存区域与GC机制
                 </a>
               
@@ -1286,8 +1441,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/02/25/cj665gj0600066qxp00w1w5mn/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/02/25/cj665gj0600066qxp00w1w5mn/" itemprop="commentCount"></span>
+                <a href="/2017/02/25/cj6dexen40003fgxpxrdu31kt/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/02/25/cj6dexen40003fgxpxrdu31kt/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1317,7 +1472,7 @@
           <h3 id="JVM内存区域"><a href="#JVM内存区域" class="headerlink" title="JVM内存区域"></a>JVM内存区域</h3><p>了解Java GC之前，必须先搞清楚JVM中内存区域的划分。<br><img src="http://upload-images.jianshu.io/upload_images/1239929-57cecd7aa84dbb81.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/500" alt="JVM内存区域图"><br>JVM中内存区域大致可分为如上图所示几大区域。其中：</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/02/25/cj665gj0600066qxp00w1w5mn/#more" rel="contents">
+            <a class="btn" href="/2017/02/25/cj6dexen40003fgxpxrdu31kt/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1360,7 +1515,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://lishuo.me/2016/12/07/cj665gj0700076qxpzksn9p4z/">
+    <link itemprop="mainEntityOfPage" href="http://lishuo.me/2016/12/07/cj6dexenr000ffgxp6b5hw5na/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="特立独行的猪手">
@@ -1382,7 +1537,7 @@
             
               
                 
-                <a class="post-title-link" href="/2016/12/07/cj665gj0700076qxpzksn9p4z/" itemprop="url">
+                <a class="post-title-link" href="/2016/12/07/cj6dexenr000ffgxp6b5hw5na/" itemprop="url">
                   MongoDB 2dsphere Indexes
                 </a>
               
@@ -1440,8 +1595,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2016/12/07/cj665gj0700076qxpzksn9p4z/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2016/12/07/cj665gj0700076qxpzksn9p4z/" itemprop="commentCount"></span>
+                <a href="/2016/12/07/cj6dexenr000ffgxp6b5hw5na/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2016/12/07/cj6dexenr000ffgxp6b5hw5na/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1472,7 +1627,7 @@
 <p>MongoDB 2dsphere 是用来支持球体几何计算查询的索引。2dspheres 索引支持所有MongoDB地理空间查询：inclusion、intersection、 proximity。<br>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016/12/07/cj665gj0700076qxpzksn9p4z/#more" rel="contents">
+            <a class="btn" href="/2016/12/07/cj6dexenr000ffgxp6b5hw5na/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1515,7 +1670,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://lishuo.me/2016/10/20/cj665gj10000v6qxp0hnkcaxe/">
+    <link itemprop="mainEntityOfPage" href="http://lishuo.me/2016/10/20/cj6dexeof0010fgxp8tni3pi9/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="特立独行的猪手">
@@ -1537,7 +1692,7 @@
             
               
                 
-                <a class="post-title-link" href="/2016/10/20/cj665gj10000v6qxp0hnkcaxe/" itemprop="url">
+                <a class="post-title-link" href="/2016/10/20/cj6dexeof0010fgxp8tni3pi9/" itemprop="url">
                   浅谈接口安全那些事
                 </a>
               
@@ -1595,8 +1750,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2016/10/20/cj665gj10000v6qxp0hnkcaxe/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2016/10/20/cj665gj10000v6qxp0hnkcaxe/" itemprop="commentCount"></span>
+                <a href="/2016/10/20/cj6dexeof0010fgxp8tni3pi9/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2016/10/20/cj6dexeof0010fgxp8tni3pi9/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1629,161 +1784,7 @@
 <p>对于移动应用来说，服务端开放的接口极有可能一些别有用心挖出了，其实很难避免接口暴露到公网去，所以服务端在接口设计层面就必须加以考虑。下面就简单列举几种措施来对付接口安全问题。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016/10/20/cj665gj10000v6qxp0hnkcaxe/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://lishuo.me/2016/09/21/cj665gj0a00096qxpjhvu8wra/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="特立独行的猪手">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://i1.piimg.com/567571/989180cb5486364b.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Lis`s  Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/09/21/cj665gj0a00096qxpjhvu8wra/" itemprop="url">
-                  Message Queue 消息队列
-                </a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-21T17:20:00+08:00">
-                2016-09-21
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2016/09/21/cj665gj0a00096qxpjhvu8wra/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2016/09/21/cj665gj0a00096qxpjhvu8wra/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h3 id="消息队列概述"><a href="#消息队列概述" class="headerlink" title="消息队列概述"></a>消息队列概述</h3><p>消息队列是系统中重要的中间件，主要解决应用耦合，异步消息，高并发等问题。实现高性能，高可用，可伸缩和最终一致性架构。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2016/09/21/cj665gj0a00096qxpjhvu8wra/#more" rel="contents">
+            <a class="btn" href="/2016/10/20/cj6dexeof0010fgxp8tni3pi9/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1866,7 +1867,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">34</span>
+                <span class="site-state-item-count">35</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

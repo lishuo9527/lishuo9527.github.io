@@ -1,0 +1,940 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Java,SpringMVC,源码分析," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="http://i1.piimg.com/567571/989180cb5486364b.jpg?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="SpringMVC源码分析–HandlerMappings之前分析过SpringMVC中的DispatcherServlet，分析了SpringMVC处理请求的过程。但忽略了一些DispatcherServlet协助请求处理的组件，例如SpringMVC中的HandlerMapping、HandlerAdapter、ViewResolvers等等。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringMVC源码分析--HandlerMappings">
+<meta property="og:url" content="http://lishuo.me/2017/08/15/cj6dexenk0009fgxpco0muwyc/index.html">
+<meta property="og:site_name" content="Lis`s  Blog">
+<meta property="og:description" content="SpringMVC源码分析–HandlerMappings之前分析过SpringMVC中的DispatcherServlet，分析了SpringMVC处理请求的过程。但忽略了一些DispatcherServlet协助请求处理的组件，例如SpringMVC中的HandlerMapping、HandlerAdapter、ViewResolvers等等。">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNc79gy1fijgaq2g96j312i0mmaby.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNc79gy1fijglyzll2j31600p2dig.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79gy1fijgt94dshj316u0umtbk.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNc79gy1fijh94m0dhj315c0uewhi.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1fij1n4vvi4j313k0w477d.jpg">
+<meta property="og:updated_time" content="2017-08-15T09:55:19.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SpringMVC源码分析--HandlerMappings">
+<meta name="twitter:description" content="SpringMVC源码分析–HandlerMappings之前分析过SpringMVC中的DispatcherServlet，分析了SpringMVC处理请求的过程。但忽略了一些DispatcherServlet协助请求处理的组件，例如SpringMVC中的HandlerMapping、HandlerAdapter、ViewResolvers等等。">
+<meta name="twitter:image" content="https://ws4.sinaimg.cn/large/006tNc79gy1fijgaq2g96j312i0mmaby.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://lishuo.me/2017/08/15/cj6dexenk0009fgxpco0muwyc/"/>
+
+
+
+
+
+  <title> SpringMVC源码分析--HandlerMappings | Lis`s  Blog </title>
+  <meta name="baidu-site-verification" content="xd9p2Pbnya" />
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?04c3d6bbc9cc999595dba945a9475b5a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Lis`s  Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">一盘炒猪肝 二两黄酒 黄酒温一温</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://lishuo.me/2017/08/15/cj6dexenk0009fgxpco0muwyc/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="特立独行的猪手">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://i1.piimg.com/567571/989180cb5486364b.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lis`s  Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+            
+            
+              
+                SpringMVC源码分析--HandlerMappings
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-15T17:53:43+08:00">
+                2017-08-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/源码分析/" itemprop="url" rel="index">
+                    <span itemprop="name">源码分析</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/源码分析/SpringMVC/" itemprop="url" rel="index">
+                    <span itemprop="name">SpringMVC</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/08/15/cj6dexenk0009fgxpco0muwyc/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/08/15/cj6dexenk0009fgxpco0muwyc/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-eye"></i>本文总阅读量
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="SpringMVC源码分析–HandlerMappings"><a href="#SpringMVC源码分析–HandlerMappings" class="headerlink" title="SpringMVC源码分析–HandlerMappings"></a>SpringMVC源码分析–HandlerMappings</h1><p>之前分析过<code>SpringMVC</code>中的<code>DispatcherServlet</code>，分析了<code>SpringMVC</code>处理请求的过程。但忽略了一些<code>DispatcherServlet</code>协助请求处理的组件，例如<code>SpringMVC</code>中的<code>HandlerMapping</code>、<code>HandlerAdapter</code>、<code>ViewResolvers</code>等等。</p>
+<a id="more"></a>
+<h3 id="HandlerMappings"><a href="#HandlerMappings" class="headerlink" title="HandlerMappings"></a>HandlerMappings</h3><p><code>HandlerMappings</code>在<code>DispathServlet</code>中主要作用是为请求的<code>urlpath</code>匹配对应的<code>Controller</code>，建立一个映射关系，根据请求查找<code>Handler</code>、<code>Interceptor</code>。<code>HandlerMappings</code>将请求传递到<code>HandlerExecutionChain</code>上，<code>HandlerExecutionChain</code>包含了一个能够处理该请求的处理器，还可以包含拦截改请求的拦截器。</p>
+<p>在没有处理器映射相关配置情况下，<code>DispatcherServlet</code>会为你创建一个<code>BeanNameUrlHandlerMapping</code>作为默认映射的配置。在<code>DispatchServlet.properties</code>文件中对于<code>HandlerMapping</code>的默认配置是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">org.springframework.web.servlet.HandlerMapping=org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping,\</div><div class="line">	org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping</div></pre></td></tr></table></figure>
+<p><code>HandlerMapping</code>的配置策略一般分为配置式<code>BeanNameUrlHandlerMapping</code>和注解式<code>DefaultAnnotationHandlerMapping</code>。不过<code>DefaultAnnotationHandlerMapping</code>已经被放弃了，取代它的是<code>RequestMappingHandlerMapping</code>，不知道为啥<code>SpringMVC</code>这个默认配置尚未做修改。</p>
+<h3 id="AbstractHandlerMapping"><a href="#AbstractHandlerMapping" class="headerlink" title="AbstractHandlerMapping"></a>AbstractHandlerMapping</h3><p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1fijgaq2g96j312i0mmaby.jpg" alt=""></p>
+<p><code>AbstractHandlerMapping</code>是<code>HandlerMapping</code>的抽象实现，是所有<code>HandlerMapping</code>实现类的父类。</p>
+<p><code>AbstractHandlerMapping</code>的作用是是为了初始化<code>Interceptors</code>。<code>AbstractHandlerMapping</code>重写了<code>WebApplicationObjectSupport</code>的<code>initApplicationContext</code>方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">initApplicationContext</span><span class="params">()</span> <span class="keyword">throws</span> BeansException </span>&#123;</div><div class="line">	extendInterceptors(<span class="keyword">this</span>.interceptors);</div><div class="line">	detectMappedInterceptors(<span class="keyword">this</span>.adaptedInterceptors);</div><div class="line">	initInterceptors();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li><p><code>extendInterceptors</code>方法，<code>Springmvc</code>并没有做出具体实现，这里留下一个拓展，子类可以重写这个模板方法，为子类添加或者修改<code>Interceptors</code>。</p>
+</li>
+<li><p><code>detectMappedInterceptors</code>方法将<code>SpringMVC</code>容器中所有<code>MappedInterceptor</code>类的<code>bean</code>添加到<code>adaptedInterceptors</code>中。</p>
+</li>
+<li>最后调用<code>initInterceptors</code>初始化拦截器。遍历<code>interceptors</code>将<code>WebRequestInterceptor</code>和<code>HandlerInterceptor</code>类型的拦截器添加到<code>adaptedInterceptors</code>中。</li>
+</ul>
+<p><code>HandlerMapping</code>通过<code>getHandler</code>方法来获取请求的处理器<code>Handler</code>和拦截器<code>Interceptor</code>。在<code>getHandlerExecutionChain</code>方法中将遍历之前初始化的<code>adaptedInterceptors</code>，为当前的请求选择对应的<code>MappedInterceptors</code>和<code>adaptedInterceptors</code>。</p>
+<h3 id="AbstractUrlHandlerMapping"><a href="#AbstractUrlHandlerMapping" class="headerlink" title="AbstractUrlHandlerMapping"></a>AbstractUrlHandlerMapping</h3><h4 id="AbstractUrlHandlerMapping-1"><a href="#AbstractUrlHandlerMapping-1" class="headerlink" title="AbstractUrlHandlerMapping"></a>AbstractUrlHandlerMapping</h4><p><img src="https://ws3.sinaimg.cn/large/006tNc79gy1fijglyzll2j31600p2dig.jpg" alt=""></p>
+<p><code>AbstractUrlHandlerMapping</code>继承于<code>AbstractHandlerMapping</code>，它是通过<code>URL</code>来匹配具体的<code>Handler</code>。<code>AbstractUrlHandlerMapping</code>维护一个<code>handlerMap</code>来存储<code>Url</code>和<code>Handler</code>的映射关系。</p>
+<p><code>AbstractUrlHandlerMapping</code>重写了<code>AbstractHandlerMapping</code>类中的<code>getHandlerInternal</code>方法。<code>HandlerMapping</code>通过<code>getHandler</code>方法，就会调用这里的<code>getHandlerInternal</code>方法来获取<code>Handler</code>。<code>getHandlerInternal</code>方法中关键调用<code>lookupHandler</code>方法去获取<code>handler</code>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">protected</span> Object <span class="title">lookupHandler</span><span class="params">(String urlPath, HttpServletRequest request)</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line">	<span class="comment">// Direct match?</span></div><div class="line">	Object handler = <span class="keyword">this</span>.handlerMap.get(urlPath);</div><div class="line">	<span class="keyword">if</span> (handler != <span class="keyword">null</span>) &#123;</div><div class="line">		<span class="comment">// Bean name or resolved handler?</span></div><div class="line">		<span class="keyword">if</span> (handler <span class="keyword">instanceof</span> String) &#123;</div><div class="line">			String handlerName = (String) handler;</div><div class="line">			handler = getApplicationContext().getBean(handlerName);</div><div class="line">		&#125;</div><div class="line">		validateHandler(handler, request);</div><div class="line">		<span class="keyword">return</span> buildPathExposingHandler(handler, urlPath, urlPath, <span class="keyword">null</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="comment">// Pattern match?</span></div><div class="line">	List&lt;String&gt; matchingPatterns = <span class="keyword">new</span> ArrayList&lt;String&gt;();</div><div class="line">	<span class="keyword">for</span> (String registeredPattern : <span class="keyword">this</span>.handlerMap.keySet()) &#123;</div><div class="line">		<span class="keyword">if</span> (getPathMatcher().match(registeredPattern, urlPath)) &#123;</div><div class="line">			matchingPatterns.add(registeredPattern);</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">else</span> <span class="keyword">if</span> (useTrailingSlashMatch()) &#123;</div><div class="line">			<span class="keyword">if</span> (!registeredPattern.endsWith(<span class="string">"/"</span>) &amp;&amp; getPathMatcher().match(registeredPattern + <span class="string">"/"</span>, urlPath)) &#123;</div><div class="line">				matchingPatterns.add(registeredPattern +<span class="string">"/"</span>);</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	String bestMatch = <span class="keyword">null</span>;</div><div class="line">	Comparator&lt;String&gt; patternComparator = getPathMatcher().getPatternComparator(urlPath);</div><div class="line">	<span class="keyword">if</span> (!matchingPatterns.isEmpty()) &#123;</div><div class="line">		Collections.sort(matchingPatterns, patternComparator);</div><div class="line">		<span class="keyword">if</span> (logger.isDebugEnabled()) &#123;</div><div class="line">			logger.debug(<span class="string">"Matching patterns for request ["</span> + urlPath + <span class="string">"] are "</span> + matchingPatterns);</div><div class="line">		&#125;</div><div class="line">		bestMatch = matchingPatterns.get(<span class="number">0</span>);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">if</span> (bestMatch != <span class="keyword">null</span>) &#123;</div><div class="line">		handler = <span class="keyword">this</span>.handlerMap.get(bestMatch);</div><div class="line">		<span class="keyword">if</span> (handler == <span class="keyword">null</span>) &#123;</div><div class="line">			<span class="keyword">if</span> (bestMatch.endsWith(<span class="string">"/"</span>)) &#123;</div><div class="line">				handler = <span class="keyword">this</span>.handlerMap.get(bestMatch.substring(<span class="number">0</span>, bestMatch.length() - <span class="number">1</span>));</div><div class="line">			&#125;</div><div class="line">			<span class="keyword">if</span> (handler == <span class="keyword">null</span>) &#123;</div><div class="line">				<span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(</div><div class="line">						<span class="string">"Could not find handler for best pattern match ["</span> + bestMatch + <span class="string">"]"</span>);</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		<span class="comment">// Bean name or resolved handler?</span></div><div class="line">		<span class="keyword">if</span> (handler <span class="keyword">instanceof</span> String) &#123;</div><div class="line">			String handlerName = (String) handler;</div><div class="line">			handler = getApplicationContext().getBean(handlerName);</div><div class="line">		&#125;</div><div class="line">		validateHandler(handler, request);</div><div class="line">		String pathWithinMapping = getPathMatcher().extractPathWithinPattern(bestMatch, urlPath);</div><div class="line"></div><div class="line">		<span class="comment">// There might be multiple 'best patterns', let's make sure we have the correct URI template variables</span></div><div class="line">		<span class="comment">// for all of them</span></div><div class="line">		Map&lt;String, String&gt; uriTemplateVariables = <span class="keyword">new</span> LinkedHashMap&lt;String, String&gt;();</div><div class="line">		<span class="keyword">for</span> (String matchingPattern : matchingPatterns) &#123;</div><div class="line">			<span class="keyword">if</span> (patternComparator.compare(bestMatch, matchingPattern) == <span class="number">0</span>) &#123;</div><div class="line">				Map&lt;String, String&gt; vars = getPathMatcher().extractUriTemplateVariables(matchingPattern, urlPath);</div><div class="line">				Map&lt;String, String&gt; decodedVars = getUrlPathHelper().decodePathVariables(request, vars);</div><div class="line">				uriTemplateVariables.putAll(decodedVars);</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">if</span> (logger.isDebugEnabled()) &#123;</div><div class="line">			logger.debug(<span class="string">"URI Template variables for request ["</span> + urlPath + <span class="string">"] are "</span> + uriTemplateVariables);</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">return</span> buildPathExposingHandler(handler, bestMatch, pathWithinMapping, uriTemplateVariables);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="comment">// No handler found...</span></div><div class="line">	<span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>首先调用<code>lookupHandler</code>方法来获取<code>handler</code>。在<code>lookupHandler</code>方法中，先通过<code>URL</code>在<code>handlerMap</code>查找是否有合适的<code>handler</code>。</li>
+<li>如果没有获取到<code>handler</code>，遍历<code>handlerMap</code>利用正则匹配的方法，找到符合要求的<code>handlers</code>(有可能是多个)。</li>
+<li>正则匹配是采用<code>Ant</code>风格，将会通过排序筛选出一个匹配程度最高的<code>Handler</code>。</li>
+<li>最后调用<code>buildPathExposingHandler</code>方法构建一个<code>handler</code>,添加<code>PathExposingHandlerInterceptor</code>和<code>UriTemplateVariablesHandlerInterceptor</code>两个拦截器并返回。</li>
+</ul>
+<p>上面介绍获取<code>handler</code>的过程中，会先从<code>handlerMap</code>查找。下面看一下<code>handlerMap</code>是如何初始化的。<code>AbstractUrlHandlerMapping</code>是通过<code>registerHandler</code>初始化<code>handlerMap</code>的。<code>AbstractUrlHandlerMapping</code>共有两个<code>registerHandler</code>方法。分别是注册多个<code>url</code>到一个<code>handler</code>和注册一个<code>url</code>到一个<code>handler</code>。首先判断<code>handlerMap</code>是否有此<code>handler</code>。如果存在的话，判断是否一致，不一致则抛出异常，如果不存在的话，如果<code>url</code>是<code>/</code>、<code>/*</code>，则，返回<code>root handler</code>、<code>default handler</code>，如果不是将添加到<code>handlerMap</code>中。</p>
+<h4 id="SimpleUrlHandlerMapping"><a href="#SimpleUrlHandlerMapping" class="headerlink" title="SimpleUrlHandlerMapping"></a>SimpleUrlHandlerMapping</h4><p><img src="https://ws2.sinaimg.cn/large/006tNc79gy1fijgt94dshj316u0umtbk.jpg" alt=""></p>
+<p><code>SimpleUrlHandlerMapping</code>继承于<code>AbstractUrlHandlerMapping</code>。<code>SimpleUrlHandlerMapping</code>重写了父类<code>AbstractHandlerMapping</code>中的初始化方法<code>initApplicationContext</code>。在<code>initApplicationContext</code>方法中调用<code>registerHandlers</code>方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">registerHandlers</span><span class="params">(Map&lt;String, Object&gt; urlMap)</span> <span class="keyword">throws</span> BeansException </span>&#123;</div><div class="line">	<span class="keyword">if</span> (urlMap.isEmpty()) &#123;</div><div class="line">		logger.warn(<span class="string">"Neither 'urlMap' nor 'mappings' set on SimpleUrlHandlerMapping"</span>);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">else</span> &#123;</div><div class="line">		<span class="keyword">for</span> (Map.Entry&lt;String, Object&gt; entry : urlMap.entrySet()) &#123;</div><div class="line">			String url = entry.getKey();</div><div class="line">			Object handler = entry.getValue();</div><div class="line">			<span class="comment">// Prepend with slash if not already present.</span></div><div class="line">			<span class="keyword">if</span> (!url.startsWith(<span class="string">"/"</span>)) &#123;</div><div class="line">				url = <span class="string">"/"</span> + url;</div><div class="line">			&#125;</div><div class="line">			<span class="comment">// Remove whitespace from handler bean name.</span></div><div class="line">			<span class="keyword">if</span> (handler <span class="keyword">instanceof</span> String) &#123;</div><div class="line">				handler = ((String) handler).trim();</div><div class="line">			&#125;</div><div class="line">			registerHandler(url, handler);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>判断是<code>url</code>是否以<code>/</code>开头，如果不是，默认补齐<code>/</code>,确保所有的url都是以<code>/</code>开头，然后依次调用父类的<code>registerHandler</code>方法注册到<code>AbstractUrlHandlerMapping</code>中的<code>handlerMap</code>。</p>
+<p>在使用<code>SimpleUrlHandlerMapping</code>时，需要在注册的时候配置其<code>urlmap</code>否则会抛异常。</p>
+<h4 id="AbstractDetectingUrlHandlerMapping"><a href="#AbstractDetectingUrlHandlerMapping" class="headerlink" title="AbstractDetectingUrlHandlerMapping"></a>AbstractDetectingUrlHandlerMapping</h4><p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1fijh94m0dhj315c0uewhi.jpg" alt=""></p>
+<p><code>AbstractDetectingUrlHandlerMapping</code>类继承于<code>AbstractUrlHandlerMapping</code>类，重写了<code>initApplicationContext</code>方法，在<code>initApplicationContext</code>方法中调用了<code>detectHandlers</code>方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">detectHandlers</span><span class="params">()</span> <span class="keyword">throws</span> BeansException </span>&#123;</div><div class="line">	<span class="keyword">if</span> (logger.isDebugEnabled()) &#123;</div><div class="line">		logger.debug(<span class="string">"Looking for URL mappings in application context: "</span> + getApplicationContext());</div><div class="line">	&#125;</div><div class="line">	String[] beanNames = (<span class="keyword">this</span>.detectHandlersInAncestorContexts ?</div><div class="line">			BeanFactoryUtils.beanNamesForTypeIncludingAncestors(getApplicationContext(), Object.class) :</div><div class="line">			getApplicationContext().getBeanNamesForType(Object.class));</div><div class="line"></div><div class="line">	<span class="comment">// Take any bean name that we can determine URLs for.</span></div><div class="line">	<span class="keyword">for</span> (String beanName : beanNames) &#123;</div><div class="line">		String[] urls = determineUrlsForHandler(beanName);</div><div class="line">		<span class="keyword">if</span> (!ObjectUtils.isEmpty(urls)) &#123;</div><div class="line">			<span class="comment">// URL paths found: Let's consider it a handler.</span></div><div class="line">			registerHandler(urls, beanName);</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">else</span> &#123;</div><div class="line">			<span class="keyword">if</span> (logger.isDebugEnabled()) &#123;</div><div class="line">				logger.debug(<span class="string">"Rejected bean name '"</span> + beanName + <span class="string">"': no URL paths identified"</span>);</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>获取所有容器的<code>beanNames</code>，遍历所有的<code>beanName</code>，调用<code>determineUrlsForHandler</code>方法解析<code>url</code>，这里的<code>determineUrlsForHandler</code>也是运用了模板方法设计模式，具体的实现在其子类中，如果解析到子类，将注册到父类的<code>handlerMap</code>中。</p>
+<h4 id="BeanNameUrlHandlerMapping"><a href="#BeanNameUrlHandlerMapping" class="headerlink" title="BeanNameUrlHandlerMapping"></a>BeanNameUrlHandlerMapping</h4><p><code>BeanNameUrlHandlerMapping</code>类的类图大致如下：<br><img src="https://ws2.sinaimg.cn/large/006tKfTcgy1fij1n4vvi4j313k0w477d.jpg" alt=""></p>
+<p><code>BeanNameUrlHandlerMapping</code>类继承于<code>AbstractDetectingUrlHandlerMapping</code>类。重写了父类中的<code>determineUrlsForHandler</code>方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">protected</span> String[] determineUrlsForHandler(String beanName) &#123;</div><div class="line">	List&lt;String&gt; urls = <span class="keyword">new</span> ArrayList&lt;String&gt;();</div><div class="line">	<span class="keyword">if</span> (beanName.startsWith(<span class="string">"/"</span>)) &#123;</div><div class="line">		urls.add(beanName);</div><div class="line">	&#125;</div><div class="line">	String[] aliases = getApplicationContext().getAliases(beanName);</div><div class="line">	<span class="keyword">for</span> (String alias : aliases) &#123;</div><div class="line">		<span class="keyword">if</span> (alias.startsWith(<span class="string">"/"</span>)) &#123;</div><div class="line">			urls.add(alias);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> StringUtils.toStringArray(urls);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>其通过<code>beanName</code>解析<code>Url</code>规则也很简单，判断<code>beanName</code>是否以<code>/</code>开头。</p>
+<p><code>BeanNameUrlHandlerMapping</code>是<code>SpringMVC</code>的默认映射配置。</p>
+<h3 id="AbstractHandlerMethodMapping"><a href="#AbstractHandlerMethodMapping" class="headerlink" title="AbstractHandlerMethodMapping"></a>AbstractHandlerMethodMapping</h3><p>通常我们也习惯于用<code>@Controller</code>、<code>@Re
+questMapping</code>来定义<code>Handler</code>，<code>AbstractHandlerMethodMapping</code>可以将<code>method</code>作为<code>Handler</code>来使用。</p>
+<p><code>AbstractHandlerMethodMapping</code>实现了<code>InitializingBean</code>接口，实现了<code>afterPropertiesSet</code>方法。当容器启动的时候会调用<code>initHandlerMethods</code>注册委托<code>handler</code>中的方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">afterPropertiesSet</span><span class="params">()</span> </span>&#123;</div><div class="line">	initHandlerMethods();</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">initHandlerMethods</span><span class="params">()</span> </span>&#123;</div><div class="line">	<span class="keyword">if</span> (logger.isDebugEnabled()) &#123;</div><div class="line">		logger.debug(<span class="string">"Looking for request mappings in application context: "</span> + getApplicationContext());</div><div class="line">	&#125;</div><div class="line">	String[] beanNames = (<span class="keyword">this</span>.detectHandlerMethodsInAncestorContexts ?</div><div class="line">			BeanFactoryUtils.beanNamesForTypeIncludingAncestors(getApplicationContext(), Object.class) :</div><div class="line">			getApplicationContext().getBeanNamesForType(Object.class));</div><div class="line"></div><div class="line">	<span class="keyword">for</span> (String beanName : beanNames) &#123;</div><div class="line">		<span class="keyword">if</span> (!beanName.startsWith(SCOPED_TARGET_NAME_PREFIX)) &#123;</div><div class="line">			Class&lt;?&gt; beanType = <span class="keyword">null</span>;</div><div class="line">			<span class="keyword">try</span> &#123;</div><div class="line">				beanType = getApplicationContext().getType(beanName);</div><div class="line">			&#125;</div><div class="line">			<span class="keyword">catch</span> (Throwable ex) &#123;</div><div class="line">				<span class="comment">// An unresolvable bean type, probably from a lazy bean - let's ignore it.</span></div><div class="line">				<span class="keyword">if</span> (logger.isDebugEnabled()) &#123;</div><div class="line">					logger.debug(<span class="string">"Could not resolve target class for bean with name '"</span> + beanName + <span class="string">"'"</span>, ex);</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line">			<span class="keyword">if</span> (beanType != <span class="keyword">null</span> &amp;&amp; isHandler(beanType)) &#123;</div><div class="line">				detectHandlerMethods(beanName);</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	handlerMethodsInitialized(getHandlerMethods());</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在<code>initHandlerMethods</code>方法中，做了以下工作：</p>
+<ul>
+<li>首先通过<code>BeanFactoryUtils</code>扫描应用上下文，获取所有的<code>bean</code>。</li>
+<li>遍历所有的<code>beanName</code>，调用<code>isHandler</code>方法判断是目标<code>bean</code>是否包含<code>@Controller</code>或<code>@RequestMapping</code>注解。</li>
+<li>对于带有<code>@Controller</code>或<code>@RequestMapping</code>注解的类，调用<code>detectHandlerMethods</code>委托处理,获取所有的<code>method</code>，并调用<code>registerHandlerMethod</code>注册所有的方法。</li>
+</ul>
+<p>在<code>detectHandlerMethods</code>方法负责将<code>Handler</code>保存到<code>Map</code>中。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">detectHandlerMethods</span><span class="params">(<span class="keyword">final</span> Object handler)</span> </span>&#123;</div><div class="line">   <span class="comment">//  获取handler的类型</span></div><div class="line">	Class&lt;?&gt; handlerType = (handler <span class="keyword">instanceof</span> String ?</div><div class="line">			getApplicationContext().getType((String) handler) : handler.getClass());</div><div class="line">	<span class="keyword">final</span> Class&lt;?&gt; userType = ClassUtils.getUserClass(handlerType);</div><div class="line">	</div><div class="line">	Map&lt;Method, T&gt; methods = MethodIntrospector.selectMethods(userType,</div><div class="line">			<span class="keyword">new</span> MethodIntrospector.MetadataLookup&lt;T&gt;() &#123;</div><div class="line">				<span class="meta">@Override</span></div><div class="line">				<span class="function"><span class="keyword">public</span> T <span class="title">inspect</span><span class="params">(Method method)</span> </span>&#123;</div><div class="line">					<span class="keyword">try</span> &#123;</div><div class="line">						<span class="keyword">return</span> getMappingForMethod(method, userType);</div><div class="line">					&#125;</div><div class="line">					<span class="keyword">catch</span> (Throwable ex) &#123;</div><div class="line">						<span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"Invalid mapping on handler class ["</span> +</div><div class="line">								userType.getName() + <span class="string">"]: "</span> + method, ex);</div><div class="line">					&#125;</div><div class="line">				&#125;</div><div class="line">			&#125;);</div><div class="line"></div><div class="line">	<span class="keyword">if</span> (logger.isDebugEnabled()) &#123;</div><div class="line">		logger.debug(methods.size() + <span class="string">" request handler methods found on "</span> + userType + <span class="string">": "</span> + methods);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">for</span> (Map.Entry&lt;Method, T&gt; entry : methods.entrySet()) &#123;</div><div class="line">		Method invocableMethod = AopUtils.selectInvocableMethod(entry.getKey(), userType);</div><div class="line">		T mapping = entry.getValue();</div><div class="line">		registerHandlerMethod(handler, invocableMethod, mapping);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>selectMethods</code>方法中重写了<code>MetadataLookup</code>中的<code>inspect</code>方法，<code>inspect</code>方法中调用了子类<code>RequestMappingHandlerMapping</code>实现了<code>getMappingForMethod</code>模板方法，用于构建<code>RequestMappingInfo</code>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="function">Map&lt;Method, T&gt; <span class="title">selectMethods</span><span class="params">(Class&lt;?&gt; targetType, <span class="keyword">final</span> MetadataLookup&lt;T&gt; metadataLookup)</span> </span>&#123;</div><div class="line">		<span class="keyword">final</span> Map&lt;Method, T&gt; methodMap = <span class="keyword">new</span> LinkedHashMap&lt;Method, T&gt;();</div><div class="line">		Set&lt;Class&lt;?&gt;&gt; handlerTypes = <span class="keyword">new</span> LinkedHashSet&lt;Class&lt;?&gt;&gt;();</div><div class="line">		Class&lt;?&gt; specificHandlerType = <span class="keyword">null</span>;</div><div class="line"></div><div class="line">		<span class="keyword">if</span> (!Proxy.isProxyClass(targetType)) &#123;</div><div class="line">			handlerTypes.add(targetType);</div><div class="line">			specificHandlerType = targetType;</div><div class="line">		&#125;</div><div class="line">		handlerTypes.addAll(Arrays.asList(targetType.getInterfaces()));</div><div class="line"></div><div class="line">		<span class="keyword">for</span> (Class&lt;?&gt; currentHandlerType : handlerTypes) &#123;</div><div class="line">			<span class="keyword">final</span> Class&lt;?&gt; targetClass = (specificHandlerType != <span class="keyword">null</span> ? specificHandlerType : currentHandlerType);</div><div class="line"></div><div class="line">			ReflectionUtils.doWithMethods(currentHandlerType, <span class="keyword">new</span> ReflectionUtils.MethodCallback() &#123;</div><div class="line">				<span class="meta">@Override</span></div><div class="line">				<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doWith</span><span class="params">(Method method)</span> </span>&#123;</div><div class="line">					Method specificMethod = ClassUtils.getMostSpecificMethod(method, targetClass);</div><div class="line">					T result = metadataLookup.inspect(specificMethod);</div><div class="line">					<span class="keyword">if</span> (result != <span class="keyword">null</span>) &#123;</div><div class="line">						Method bridgedMethod = BridgeMethodResolver.findBridgedMethod(specificMethod);</div><div class="line">						<span class="keyword">if</span> (bridgedMethod == specificMethod || metadataLookup.inspect(bridgedMethod) == <span class="keyword">null</span>) &#123;</div><div class="line">							methodMap.put(specificMethod, result);</div><div class="line">						&#125;</div><div class="line">					&#125;</div><div class="line">				&#125;</div><div class="line">			&#125;, ReflectionUtils.USER_DECLARED_METHODS);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="keyword">return</span> methodMap;</div><div class="line">	&#125;</div></pre></td></tr></table></figure>
+<p>  在<code>selectMethods</code>通过反射获取所有的方法，重写了<code>doWith</code>方法，将<code>handler</code>中的<code>method</code>和请求对应的<code>RequestMappingInfo</code>保存到<code>methodMap</code>中。</p>
+<p>  最终<code>detectHandlerMethods</code>将遍历这个<code>methodMap</code>，调用<code>registerHandlerMethod</code>注册<code>HandlerMethod</code>到<code>MappingRegistry</code>。</p>
+<p>  在<code>AbstractHandlerMethodMapping</code>类中，有个内部类<code>MappingRegistry</code>，用来存储<code>mapping</code>和 <code>handler methods</code>注册关系，并提供了并发访问方法。</p>
+<p>  <code>AbstractHandlerMethodMapping</code>通过<code>getHandlerInternal</code>来为一个请求选择对应的<code>handler</code>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">protected</span> HandlerMethod <span class="title">getHandlerInternal</span><span class="params">(HttpServletRequest request)</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line">   <span class="comment">// 根据request获取对应的urlpath</span></div><div class="line">	String lookupPath = getUrlPathHelper().getLookupPathForRequest(request);</div><div class="line">	<span class="keyword">if</span> (logger.isDebugEnabled()) &#123;</div><div class="line">		logger.debug(<span class="string">"Looking up handler method for path "</span> + lookupPath);</div><div class="line">	&#125;</div><div class="line">	<span class="comment">// 获取读锁</span></div><div class="line">	<span class="keyword">this</span>.mappingRegistry.acquireReadLock();</div><div class="line">	<span class="keyword">try</span> &#123;</div><div class="line">	  <span class="comment">// 调用lookupHandlerMethod方法获取请求对应的HandlerMethod</span></div><div class="line">		HandlerMethod handlerMethod = lookupHandlerMethod(lookupPath, request);</div><div class="line">		<span class="keyword">if</span> (logger.isDebugEnabled()) &#123;</div><div class="line">			<span class="keyword">if</span> (handlerMethod != <span class="keyword">null</span>) &#123;</div><div class="line">				logger.debug(<span class="string">"Returning handler method ["</span> + handlerMethod + <span class="string">"]"</span>);</div><div class="line">			&#125;</div><div class="line">			<span class="keyword">else</span> &#123;</div><div class="line">				logger.debug(<span class="string">"Did not find handler method for ["</span> + lookupPath + <span class="string">"]"</span>);</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">return</span> (handlerMethod != <span class="keyword">null</span> ? handlerMethod.createWithResolvedBean() : <span class="keyword">null</span>);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">finally</span> &#123;</div><div class="line">		<span class="keyword">this</span>.mappingRegistry.releaseReadLock();</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>lookupHandlerMethod</code>的具体实现如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">protected</span> HandlerMethod <span class="title">lookupHandlerMethod</span><span class="params">(String lookupPath, HttpServletRequest request)</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line">		List&lt;Match&gt; matches = <span class="keyword">new</span> ArrayList&lt;Match&gt;();</div><div class="line">		<span class="comment">// 通过lookupPath获取所有匹配到的path</span></div><div class="line">		List&lt;T&gt; directPathMatches = <span class="keyword">this</span>.mappingRegistry.getMappingsByUrl(lookupPath);</div><div class="line">		<span class="keyword">if</span> (directPathMatches != <span class="keyword">null</span>) &#123;</div><div class="line">		   <span class="comment">// 将匹配条件添加到matches</span></div><div class="line">			addMatchingMappings(directPathMatches, matches, request);</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">if</span> (matches.isEmpty()) &#123;</div><div class="line">			<span class="comment">// 如果没有匹配条件，将所有的匹配条件都加入matches</span></div><div class="line">			addMatchingMappings(<span class="keyword">this</span>.mappingRegistry.getMappings().keySet(), matches, request);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="keyword">if</span> (!matches.isEmpty()) &#123;</div><div class="line">			Comparator&lt;Match&gt; comparator = <span class="keyword">new</span> MatchComparator(getMappingComparator(request));</div><div class="line">			Collections.sort(matches, comparator);</div><div class="line">			<span class="keyword">if</span> (logger.isTraceEnabled()) &#123;</div><div class="line">				logger.trace(<span class="string">"Found "</span> + matches.size() + <span class="string">" matching mapping(s) for ["</span> +</div><div class="line">						lookupPath + <span class="string">"] : "</span> + matches);</div><div class="line">			&#125;</div><div class="line">			<span class="comment">// 选取排序后的第一个作为最近排序条件</span></div><div class="line">			Match bestMatch = matches.get(<span class="number">0</span>);</div><div class="line">			<span class="keyword">if</span> (matches.size() &gt; <span class="number">1</span>) &#123;</div><div class="line">				<span class="keyword">if</span> (CorsUtils.isPreFlightRequest(request)) &#123;</div><div class="line">					<span class="keyword">return</span> PREFLIGHT_AMBIGUOUS_MATCH;</div><div class="line">				&#125;</div><div class="line">				Match secondBestMatch = matches.get(<span class="number">1</span>);</div><div class="line">				<span class="comment">// 前两个匹配条件排序一样抛出异常</span></div><div class="line">				<span class="keyword">if</span> (comparator.compare(bestMatch, secondBestMatch) == <span class="number">0</span>) &#123;</div><div class="line">					Method m1 = bestMatch.handlerMethod.getMethod();</div><div class="line">					Method m2 = secondBestMatch.handlerMethod.getMethod();</div><div class="line">					<span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"Ambiguous handler methods mapped for HTTP path '"</span> +</div><div class="line">							request.getRequestURL() + <span class="string">"': &#123;"</span> + m1 + <span class="string">", "</span> + m2 + <span class="string">"&#125;"</span>);</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line">			<span class="comment">// 将lookupPath设为请求request的PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE属性</span></div><div class="line">			handleMatch(bestMatch.mapping, lookupPath, request);</div><div class="line">			<span class="keyword">return</span> bestMatch.handlerMethod;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">else</span> &#123;</div><div class="line">			<span class="keyword">return</span> handleNoMatch(<span class="keyword">this</span>.mappingRegistry.getMappings().keySet(), lookupPath, request);</div><div class="line">		&#125;</div><div class="line">	&#125;</div></pre></td></tr></table></figure>
+<p>整个过程以<code>Match</code>作为载体，<code>Match</code>是个内部类，封装了匹配条件和<code>handlerMethod</code>两个属性，默认的实现是将<code>lookupPath</code>设置为请求的属性。</p>
+<p>###总结</p>
+<p>本文从源码角度上分析了<code>HandlerMapping</code>的各种实现。主要功能是为请求找到合适的<code>handler</code>和<code>interceptors</code>，并组合成<code>HandlerExecutionChain</code>。查找<code>handler</code>的过程通过<code>getHandlerInternal</code>方法实现，每个子类都其不同的实现。</p>
+<p>所有的<code>HandlerMapping</code>的实现都继承于<code>AbstarctHandlerMapping</code>，<code>AbstarctHandlerMapping</code>主要作用是完成拦截器的初始化工作。而通过<code>AbstarctHandlerMapping</code>又衍生出两个系列，<code>AbstractUrlHandlerMapping</code>和<code>AbstractHandlerMethodMapping</code>。</p>
+<p><code>AbstractUrlHandlerMapping</code>也有很多子类的实现，如<code>SimpleUrlHandlerMapping</code>、<code>AbstractDetectingUrlHandlerMapping</code>。总体来说，<code>AbstractUrlHandlerMapping</code>需要用到一个保存<code>url</code>和<code>handler</code>的对应关系的<code>map</code>，<code>map</code>的初始化工作由子类实现。不同的子类会有自己的策略，可以在配置文件中注册，也可以在<code>spring</code>容器中找。</p>
+<p><code>AbstractHandlerMethodMapping</code>系列则通常用于注解的方法，解析包含<code>@Controller</code>或者<code>@RequestMapping</code>注解的类，建立<code>url</code>和<code>method</code>的直接对应关系，这也是目前使用最多的一种方式。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/SpringMVC/" rel="tag"># SpringMVC</a>
+          
+            <a href="/tags/源码分析/" rel="tag"># 源码分析</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/24/cj6dexenf0008fgxpe48x29e7/" rel="next" title="SpringMVC源码分析-DispatcherServlet">
+                <i class="fa fa-chevron-left"></i> SpringMVC源码分析-DispatcherServlet
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://i1.piimg.com/567571/989180cb5486364b.jpg"
+               alt="特立独行的猪手" />
+          <p class="site-author-name" itemprop="name">特立独行的猪手</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/lishuo9527" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/1655774835?refer_flag=1001030101_&is_hot=1" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/lishuo3" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-ravelry"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.jianshu.com/u/115cae858f68" target="_blank" title="简书">
+                  
+                    <i class="fa fa-fw fa-bookmark"></i>
+                  
+                  简书
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.7mdm.com/" title="齐码代码" target="_blank">齐码代码</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="https://halfrost.com/" title="Halfrost's Field" target="_blank">Halfrost's Field</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://qdxmq.com/" title="前端小密圈" target="_blank">前端小密圈</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#SpringMVC源码分析–HandlerMappings"><span class="nav-number">1.</span> <span class="nav-text">SpringMVC源码分析–HandlerMappings</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#HandlerMappings"><span class="nav-number">1.0.1.</span> <span class="nav-text">HandlerMappings</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AbstractHandlerMapping"><span class="nav-number">1.0.2.</span> <span class="nav-text">AbstractHandlerMapping</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AbstractUrlHandlerMapping"><span class="nav-number">1.0.3.</span> <span class="nav-text">AbstractUrlHandlerMapping</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#AbstractUrlHandlerMapping-1"><span class="nav-number">1.0.3.1.</span> <span class="nav-text">AbstractUrlHandlerMapping</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SimpleUrlHandlerMapping"><span class="nav-number">1.0.3.2.</span> <span class="nav-text">SimpleUrlHandlerMapping</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#AbstractDetectingUrlHandlerMapping"><span class="nav-number">1.0.3.3.</span> <span class="nav-text">AbstractDetectingUrlHandlerMapping</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#BeanNameUrlHandlerMapping"><span class="nav-number">1.0.3.4.</span> <span class="nav-text">BeanNameUrlHandlerMapping</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AbstractHandlerMethodMapping"><span class="nav-number">1.0.4.</span> <span class="nav-text">AbstractHandlerMethodMapping</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">特立独行的猪手</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+<div class="busuanzi-count">
+
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+
+  
+    <span class="site-pv">本站总访问量<span class="busuanzi-value" id="busuanzi_value_site_pv"></span>次</span>
+  
+  
+</div>
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'lishuo3';
+      var disqus_identifier = '2017/08/15/cj6dexenk0009fgxpco0muwyc/';
+
+      var disqus_title = "SpringMVC源码分析--HandlerMappings";
+
+
+      function run_disqus_script(disqus_script) {
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+
+      
+        var disqus_config = function () {
+            this.page.url = disqus_url;
+            this.page.identifier = disqus_identifier;
+            this.page.title = disqus_title;
+        };
+        run_disqus_script('embed.js');
+      
+
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+
+<script>
+(function(){
+    var bp = document.createElement('script');
+    bp.src = '//push.zhanzhang.baidu.com/push.js';
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+</html>
